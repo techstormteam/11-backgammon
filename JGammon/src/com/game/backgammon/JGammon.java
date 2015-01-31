@@ -226,18 +226,9 @@ public class JGammon implements ActionListener, ConnectionListener {
             game = newGameDialog.showAndEval();
 
             if (game != null) {
-                GameConnection gc = game.getGameConnection();
-
-                // if the connection breaks, reset the game
-                if (gc != null) {
-                    gc.addConnectionListener(this);
-                }
                 game.start();
             }
             getFrame().repaint();
-
-        } else if (command.equals("saveboard")) {
-            saveBoard();
 
         } else if (command.equals("close")) {
             if (game != null) {
@@ -250,9 +241,6 @@ public class JGammon implements ActionListener, ConnectionListener {
                 }
             } else
                 exit(0);
-        } else if (command.equals("help")) {
-        	com.game.backgammon.help.HelpFrame.main(null);
-
         } else {
             if (game != null) {
                 game.handle(command);
@@ -266,53 +254,6 @@ public class JGammon implements ActionListener, ConnectionListener {
         clearGame();
         System.exit(i);
     }
-
-    public void saveBoard() {
-        if (game == null) {
-            return;
-        }
-
-        BoardSnapshot snapshot = game.getSnapshot();
-        if (snapshot == null) {
-            return;
-        }
-
-        JFileChooser jfc = new JFileChooser();
-        jfc.addChoosableFileFilter(boardFileFilter);
-        jfc.setAccessory(new BoardFileView(jfc));
-
-        while (true) {
-            if (jfc.showSaveDialog(getFrame()) != jfc.APPROVE_OPTION) {
-                return;
-            }
-
-            try {
-                File f = jfc.getSelectedFile();
-                if (f.exists()) {
-                    switch (JOptionPane.showConfirmDialog(getFrame(),
-                            msg.getString("overwrite"),
-                            msg.getString("saveboard"),
-                            JOptionPane.YES_NO_CANCEL_OPTION)) {
-                    case JOptionPane.CANCEL_OPTION:
-                        return;
-                    case JOptionPane.YES_OPTION:
-                        askComment(snapshot);
-                        snapshot.saveTo(f);
-                        return;
-                    }
-                } else {
-                    askComment(snapshot);
-                    snapshot.saveTo(f);
-                    return;
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(getFrame(), ex, "Error",
-                                              JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
 
     public Game getGame() {
         return game;
@@ -328,10 +269,6 @@ public class JGammon implements ActionListener, ConnectionListener {
 
     public void clearGame() {
         if (game != null) {
-            GameConnection gc = game.getGameConnection();
-            if (gc != null) {
-                gc.removeConnectionListener(this);
-            }
             game.abort();
         }
         game = null;
@@ -341,26 +278,12 @@ public class JGammon implements ActionListener, ConnectionListener {
 
     }
 
-    /**
-     * show a message dialog to edit the comment of a snapshot.
-     * @param snapshot BoardSnapshot to be edited
-     */
-    private void askComment(BoardSnapshot snapshot) {
-        String answer = JOptionPane.showInputDialog(getFrame(),
-                msg.getString("inputcomment"),
-                snapshot.getComment());
-        if (answer != null) {
-            snapshot.setComment(answer);
-        }
-    }
-
     public void handleConnectionMessage(ConnectionMessage cm) {
         if (cm.getType() == cm.CLOSED) {
             JOptionPane.showMessageDialog(getFrame(),
                                           "The network connection has been lost, but you can save the board",
                                           "Error",
                                           JOptionPane.ERROR_MESSAGE);
-            saveBoard();
             clearGame();
         }
     }

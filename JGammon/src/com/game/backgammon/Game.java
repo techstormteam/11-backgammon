@@ -19,12 +19,8 @@
 package com.game.backgammon;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -50,21 +46,13 @@ public class Game implements Runnable {
 
     private Player player1, player2;
     private Player currentPlayer;
-    private List history = new ArrayList();
     private JGammon jgam;
 
     private Random random;
 
-    private GameConnection gameConnection;
-
     // the game runs in its own thread
     private Thread gameThread;
 
-    // the last snapshot: this can be saved to disk.
-    private BoardSnapshot snapshot;
-
-    // this is the setup to which must be returned to undo
-    private BoardSnapshot undoSnapshot;
     // the player that may undo
     private Player undoPlayer;
 
@@ -82,28 +70,14 @@ public class Game implements Runnable {
     private ResourceBundle msg = ResourceBundle.getBundle("com.game.backgammon.msg.Game");
     private MessageFormat msgFormat = new MessageFormat("");
 
-    public Game(GameConnection gc, Player p1, Player p2, JGammon jgam) throws
-            ProtocolException,
+    public Game(Player p1, Player p2, JGammon jgam) throws
             IOException {
         random = new Random();
-        gameConnection = gc;
         player1 = p1;
         player2 = p2;
         player1.setGame(this);
         player2.setGame(this);
         this.jgam = jgam;
-
-        // add the remoteUndo handler
-        if (gc != null) {
-            gc.addConnectionListener(new ConnectionListener() {
-                public void handleConnectionMessage(ConnectionMessage cm) {
-                    if (cm.getType() == cm.MESSAGE &&
-                        cm.getMessage().equals(">UNDO_REQUEST")) {
-                        getCurrentPlayer().handle("remoteUndo");
-                    }
-                }
-            });
-        }
     }
 
     public Player getPlayerWhite() {
@@ -161,7 +135,7 @@ public class Game implements Runnable {
         gameThread.start();
     }
 
-    private void chooseBeginner() throws ProtocolException, IOException {
+    private void chooseBeginner() throws IOException {
         jgam.getFrame().setLabel(msg.getString("choosing"));
         jgam.getFrame().setIcon(null);
         int d[];
@@ -181,7 +155,6 @@ public class Game implements Runnable {
         // but we show the original result!
         dice = d;
         currentPlayer.setPossibleHops(dice);
-        snapshot = undoSnapshot = new BoardSnapshot(this);
 	undoPlayer = currentPlayer;
 
     }
@@ -201,7 +174,6 @@ public class Game implements Runnable {
                                      iter.hasNext(); ) {
                     SingleMove sm = (SingleMove) iter.next();
                     currentPlayer.performMove(sm);
-                    history.add(sm);
                     getOtherPlayer().informMove(sm);
                 }
                 jgam.getFrame().repaint();
@@ -225,19 +197,17 @@ public class Game implements Runnable {
 
             switchPlayers();
             dice = null;
-            snapshot = new BoardSnapshot(this);
         }
 
         // dice == null now
 
         //
-        // DOUBLE, GIVE_UP, ROLL
+        // GIVE_UP, ROLL
         //
         int step = currentPlayer.nextStep();
         getOtherPlayer().setDice(null);
         jgam.getFrame().repaint();
         while (step != Player.ROLL) {
-            history.add(new HistoryMessage(step, currentPlayer));
             boolean answer;
             jgam.getFrame().setLabel(msgFormat.format(msg.getString(
                     "wait"),
@@ -245,16 +215,12 @@ public class Game implements Runnable {
             jgam.getFrame().setIcon(AsynchronousWaitingWindow.clock);
             answer = getOtherPlayer().acceptsOffer(step);
             setCurrentPlayerLabel();
-            history.add(new HistoryMessage(answer ? "Accept." :
-                                           "Decline.", getOtherPlayer()));
             currentPlayer.informAccept(answer);
             if (step == Player.DOUBLE) {
                 if (answer) {
                     doubleDice *= 2;
                     doublePlayer = getOtherPlayer();
                     jgam.getFrame().repaint();
-		    undoSnapshot = new BoardSnapshot(this);
-		    undoPlayer = currentPlayer;
                 } else {
                     winner = currentPlayer;
                     return;
@@ -269,44 +235,19 @@ public class Game implements Runnable {
         getOtherPlayer().informRoll();
         dice = rollDice(2);
         currentPlayer.setDice(dice);
-        undoSnapshot = new BoardSnapshot(this);
-	undoPlayer = currentPlayer;
 
     }
 
     public void run() {
         try {
-            if (snapshot == null) {
-                chooseBeginner();
-            } else {
-                applySnapshot(snapshot);
-                undoSnapshot = snapshot;
-            }
-
+            chooseBeginner();
 
             while (winner == null) {
-                try {
-                    setCurrentPlayerLabel();
-                    play();
-                } catch (UndoException ex) {
-                    if (ex.sendMessage() && gameConnection != null) {
-                        gameConnection.getWriter().write("UNDO\n");
-                        gameConnection.getWriter().flush();
-                    }
-                    if(!undoSnapshot.equals(new BoardSnapshot(this))) {
-                        JOptionPane.showMessageDialog(jgam.getFrame(),
-                                msg.getString("undone"));
-                        setSnapshot(undoSnapshot);
-                        applySnapshot(undoSnapshot);
-                    }
-                }
+                setCurrentPlayerLabel();
+                play();
             }
 
             jgam.getFrame().repaint();
-            // bugfix: no error window!
-            if (gameConnection != null) {
-                gameConnection.removeConnectionListener(jgam);
-            }
             // somewon has won.
             msgFormat.applyPattern(msg.getString("wins" + winType));
             String M = msgFormat.format(new Object[] {winner.getName()});
@@ -321,11 +262,6 @@ public class Game implements Runnable {
                                           winner.getChipIcon());
             jgam.clearGame();
 
-        } catch (InterruptedIOException ex) {
-            // this is ok.
-            System.err.println(
-                    "Thread has been interrupted to end this thread:");
-            ex.printStackTrace();
         } catch (InterruptedException ex) {
             // this is ok.
             System.err.println(
@@ -336,7 +272,6 @@ public class Game implements Runnable {
             JOptionPane.showMessageDialog(getJGam().getFrame(), ex.getMessage(),
                                           "Error",
                                           JOptionPane.ERROR_MESSAGE);
-            jgam.saveBoard();
             jgam.clearGame();
         }
     }
@@ -364,9 +299,6 @@ public class Game implements Runnable {
      * the running tasked must interrupted (if waiting for input)
      */
     synchronized public void abort() {
-        if (gameConnection != null) {
-            gameConnection.close();
-        }
         gameThread.interrupt();
         try {
             gameThread.join();
@@ -398,10 +330,6 @@ public class Game implements Runnable {
         return doubleDice;
     }
 
-    public List getHistory() {
-        return Collections.unmodifiableList(history);
-    }
-
     public JGammon getJGam() {
         return jgam;
     }
@@ -415,11 +343,6 @@ public class Game implements Runnable {
     }
 
 
-    public GameConnection getGameConnection() {
-        return gameConnection;
-    }
-
-
     /**
      * roll count dice
      *
@@ -427,11 +350,7 @@ public class Game implements Runnable {
      * @return int[] must have length of count!!
      * @todo Implement this jgam.Player method
      */
-    private int[] rollDice(int count) throws IOException, ProtocolException {
-
-        if (gameConnection != null) {
-            return gameConnection.rollDice(count);
-        }
+    private int[] rollDice(int count) throws IOException {
 
         int ret[] = new int[count];
         for (int i = 0; i < count; i++) {
@@ -455,32 +374,6 @@ public class Game implements Runnable {
             }
         } catch (Exception ex) {}
         return random.nextInt(6) + 1;
-    }
-
-    /**
-     * save the snapshot to be set when the game begins or restarts.
-     * @param snapshot BoardSnapshot
-     */
-    void setSnapshot(BoardSnapshot snapshot) {
-        this.snapshot = snapshot;
-    }
-
-    synchronized public void applySnapshot(BoardSnapshot snapshot) {
-        player1.setBoard(snapshot.getWhiteBoard());
-        player2.setBoard(snapshot.getBlueBoard());
-        doubleDice = snapshot.getDoubleDice();
-        doublePlayer = snapshot.getDoublePlayer(player1, player2);
-        currentPlayer = snapshot.getCurrentPlayer(player1, player2);
-        dice = snapshot.getDice();
-        currentPlayer.setDice(dice);
-	List H = snapshot.getHistory();
-	if(H != null)
-	    history = H;
-
-    }
-
-    public BoardSnapshot getSnapshot() {
-        return snapshot;
     }
 
 

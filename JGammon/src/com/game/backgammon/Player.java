@@ -78,7 +78,7 @@ public abstract class Player {
      * @param game Game
      * @throws happens in NetworkPlayer
      */
-    public void setGame(Game game) throws IOException, ProtocolException {
+    public void setGame(Game game) throws IOException {
         this.game = game;
     }
 

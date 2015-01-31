@@ -57,7 +57,6 @@ public class JGamFrame extends JFrame {
     private JPanel jToolBar = new JPanel();
     private JButton buttonNew = new JButton();
     private JButton buttonGiveUp = new JButton();
-    private JButton buttonDouble = new JButton();
     private JButton buttonRoll = new JButton();
     private JLabel label = new JLabel();
     private ImageIcon imageDice = new ImageIcon();
@@ -100,13 +99,10 @@ public class JGamFrame extends JFrame {
         buttonNew.setText(msg.getString("newgame"));
         buttonGiveUp.setActionCommand("giveup");
         buttonGiveUp.setText(msg.getString("giveup"));
-        buttonDouble.setActionCommand("double");
-        buttonDouble.setText(msg.getString("double"));
         buttonRoll.setActionCommand("roll");
         buttonRoll.setIcon(imageDice);
         buttonRoll.setText(msg.getString("roll"));
         buttonNew.addActionListener(jGam);
-        buttonDouble.addActionListener(jGam);
         buttonGiveUp.addActionListener(jGam);
         buttonRoll.addActionListener(jGam);
         label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -125,9 +121,6 @@ public class JGamFrame extends JFrame {
                 new Insets(0, 0, 0, 0), 0, 0));
         jToolBar.add(buttonGiveUp, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
-        jToolBar.add(buttonDouble, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0
-                , GridBagConstraints.EAST, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         jToolBar.add(buttonRoll, new GridBagConstraints(5, 0, 1, 2, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.BOTH,
@@ -151,14 +144,12 @@ public class JGamFrame extends JFrame {
 
     public void enableButtons(boolean rollOnly) {
         if(!rollOnly) {
-            buttonDouble.setEnabled(true);
             buttonGiveUp.setEnabled(true);
         }
         buttonRoll.setEnabled(true);
     }
 
     public void disableButtons() {
-        buttonDouble.setEnabled(false);
            buttonGiveUp.setEnabled(false);
        buttonRoll.setEnabled(false);
 

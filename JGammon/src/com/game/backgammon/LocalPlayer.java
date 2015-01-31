@@ -115,7 +115,7 @@ public class LocalPlayer extends Player {
      * @return Move
      * @todo Implement this jgam.Player method
      */
-    synchronized public Move move() throws InterruptedException, UndoException {
+    synchronized public Move move() throws InterruptedException {
         while (true) {
             allowMoves = true;
             wait();
@@ -123,9 +123,6 @@ public class LocalPlayer extends Player {
             if (lastMessage instanceof Move) {
                 Move m = (Move) lastMessage;
                 return m;
-            }
-            if (lastMessage.equals("undo")) {
-                throw new UndoException(true);
             }
         }
     }
@@ -164,7 +161,7 @@ public class LocalPlayer extends Player {
      * @todo Implement this jgam.Player method
      */
     synchronized public int nextStep(boolean rollOnly) throws
-            InterruptedException, UndoException {
+            InterruptedException {
 
         int ret = -1;
         getGame().getJGam().getFrame().enableButtons(rollOnly);
@@ -198,11 +195,6 @@ public class LocalPlayer extends Player {
                         ret = GIVE_UP_BACKGAMMON;
                     }
                 }
-            } else if (lastMessage.equals("remoteUndo") && getGame().getUndoPlayer() == getOtherPlayer()) {
-                throw new UndoException(true);
-            } else if (lastMessage.equals("undo") && !getGame().getUndoPlayer().isRemote()) {
-                // local vs. local has no remoteUndo!
-                throw new UndoException(true);
             }
         }
 
