@@ -47,9 +47,9 @@ import javax.swing.filechooser.FileFilter;
  */
 public class JGammon implements ActionListener, ConnectionListener {
 
-    public final static String VERSION = "1.0.1";
+    public final static String VERSION = "1.0.0";
+    public final static String AUTHOR = "Aviv";
     private JGamFrame jGamFrame;
-    private Chatter chatter;
     private NewGameDialog newGameDialog;
     private Game game;
 
@@ -65,7 +65,6 @@ public class JGammon implements ActionListener, ConnectionListener {
         newGameDialog = new NewGameDialog(this);
         centerFrame(jGamFrame);
         jGamFrame.setVisible(true);
-        chatter = new Chatter(this);
     }
 
     /**
@@ -232,14 +231,10 @@ public class JGammon implements ActionListener, ConnectionListener {
                 // if the connection breaks, reset the game
                 if (gc != null) {
                     gc.addConnectionListener(this);
-                    gc.addConnectionListener(chatter);
                 }
                 game.start();
             }
             getFrame().repaint();
-
-        } else if (command.equals("chat")) {
-            chatter.setVisible(true);
 
         } else if (command.equals("saveboard")) {
             saveBoard();
@@ -367,10 +362,6 @@ public class JGammon implements ActionListener, ConnectionListener {
                                           JOptionPane.ERROR_MESSAGE);
             saveBoard();
             clearGame();
-        }
-
-        if (cm.getType() == cm.MESSAGE && cm.getMessage().startsWith(">MSG ")) {
-            getFrame().setMessage(cm.getMessage().substring(5));
         }
     }
 

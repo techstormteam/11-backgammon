@@ -61,7 +61,7 @@ public class GameConnection extends Thread {
 
     private List connectionListeners = new ArrayList();
 
-    private ResourceBundle msg = ResourceBundle.getBundle("jgam.msg.JGam");
+    private ResourceBundle msg = ResourceBundle.getBundle("com.game.backgammon.msg.JGam");
 
     /**
      * create a new connection by connecting to a server

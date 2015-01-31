@@ -79,7 +79,7 @@ public class Game implements Runnable {
 
     private int dice[];
 
-    private ResourceBundle msg = ResourceBundle.getBundle("jgam.msg.Game");
+    private ResourceBundle msg = ResourceBundle.getBundle("com.game.backgammon.msg.Game");
     private MessageFormat msgFormat = new MessageFormat("");
 
     public Game(GameConnection gc, Player p1, Player p2, JGammon jgam) throws

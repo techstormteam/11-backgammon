@@ -38,7 +38,7 @@ public class LocalPlayer extends Player {
     /** used for commication betw. threads */
     private Object lastMessage;
 
-    private ResourceBundle msg = ResourceBundle.getBundle("jgam.msg.Player");
+    private ResourceBundle msg = ResourceBundle.getBundle("com.game.backgammon.msg.Player");
     private MessageFormat msgFormat = new MessageFormat("");
 
     /** if this is true
