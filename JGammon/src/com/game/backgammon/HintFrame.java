@@ -27,7 +27,7 @@ import com.game.backgammon.util.BitArray;
  *
  * <p>Company: </p>
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
 public class HintFrame extends JFrame {

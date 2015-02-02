@@ -40,7 +40,7 @@ import com.game.backgammon.util.AsynchronousWaitingWindow;
  *
  * A game can be stopped via the abort-method.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class Game implements Runnable {
 

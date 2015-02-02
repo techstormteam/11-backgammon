@@ -20,7 +20,7 @@ package com.game.backgammon;
 
 /**
  * An object that has a string representation and belongs to a player
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public interface PlayerOwnedObject {
 

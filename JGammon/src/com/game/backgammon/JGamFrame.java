@@ -48,7 +48,7 @@ import javax.swing.SwingConstants;
  *
  * Buttons are partly handled by JGam and partly by this class.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class JGamFrame extends JFrame {
 	

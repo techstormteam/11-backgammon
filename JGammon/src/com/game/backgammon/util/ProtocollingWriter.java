@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * protocol each outgoing line to System.err (ending with '\n')
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
 public class ProtocollingWriter extends Writer {

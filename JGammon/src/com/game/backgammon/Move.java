@@ -27,7 +27,7 @@ import java.util.*;
  * Possible values are 0-25.
  * The length is the difference between from() and to()
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public interface Move extends PlayerOwnedObject, Comparable {
 

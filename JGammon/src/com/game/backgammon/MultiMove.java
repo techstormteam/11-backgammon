@@ -30,7 +30,7 @@ import java.util.*;
  *
  * Both m1 or m2 may be MultiMove-Objects themselves.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class MultiMove implements Move {
 

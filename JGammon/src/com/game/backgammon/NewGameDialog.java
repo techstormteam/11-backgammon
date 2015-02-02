@@ -47,7 +47,7 @@ import javax.swing.event.ChangeListener;
  * This dialog is showed before starting a new game.
  *
  * Some pictures are taken from: iconarchive.com
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
     private JPanel panel1 = new JPanel();

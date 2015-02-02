@@ -37,7 +37,7 @@ import javax.swing.ImageIcon;
  *
  * During Board.paint() this paint method is also called.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class BoardMouseListener implements MouseListener, MouseMotionListener {
 

@@ -32,7 +32,7 @@ import javax.swing.JComponent;
  * Additionally it allows drag and drop via a BoardMouseListener.
  * Additionally it allows an Animation to be drawn via BoardAnimation
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class Board extends JComponent {
 
@@ -375,9 +375,9 @@ public class Board extends JComponent {
     private static ImageIcon background = new ImageIcon(Board.class.getResource(
             "img/background.png"));
     static ImageIcon whiteChip = new ImageIcon(Board.class.getResource(
-            "img/whiteChip.gif"));
+            "img/whiteChip.png"));
     static ImageIcon blueChip = new ImageIcon(Board.class.getResource(
-            "img/blueChip.gif"));
+            "img/blueChip.png"));
     static ImageIcon whiteChipThin = new ImageIcon(Board.class.getResource(
             "img/whiteChipThin.gif"));
     static ImageIcon blueChipThin = new ImageIcon(Board.class.getResource(
@@ -389,9 +389,9 @@ public class Board extends JComponent {
     static {
         for (int i = 1; i <= 6; i++) {
             blueDice[i - 1] = new ImageIcon(Board.class.getResource(
-                    "img/blue" + i + ".gif"));
+                    "img/blue" + i + ".png"));
             whiteDice[i - 1] = new ImageIcon(Board.class.getResource(
-                    "img/white" + i + ".gif"));
+                    "img/white" + i + ".png"));
             doubleDice[i-1] = new ImageIcon(Board.class.getResource(
                     "img/doubleDice"+(1<<i)+".png"));
         }

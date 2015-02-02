@@ -21,7 +21,7 @@ package com.game.backgammon.util;
 /**
  * A List-Type for the basic type integer.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class IntList {
 

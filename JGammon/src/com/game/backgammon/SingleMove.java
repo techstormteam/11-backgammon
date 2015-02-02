@@ -36,7 +36,7 @@ import java.util.*;
  *
  * Other notational abbreviations are allowed but not yet implemented.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class SingleMove implements Move {
 

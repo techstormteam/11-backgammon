@@ -35,7 +35,7 @@ import com.game.backgammon.util.IntList;
  * Some behaviour is different between remote and local players so this class is
  * abstract.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public abstract class Player {
 

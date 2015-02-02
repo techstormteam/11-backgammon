@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
  * It reacts to local UI-input such as moves and button pressing
  * (ROLL; DOUBLE; GIVEUP)
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class LocalPlayer extends Player {
 

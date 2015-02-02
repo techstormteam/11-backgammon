@@ -17,7 +17,7 @@ package com.game.backgammon.util;
  * Ideas:
  * Exporting to integer/long/int array ...
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class BitArray {
 

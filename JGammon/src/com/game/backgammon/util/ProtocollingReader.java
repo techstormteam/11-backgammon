@@ -24,7 +24,7 @@ import java.io.Reader;
 /**
  * protocol each incoming line (ends with \n) to System.err
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
 public class ProtocollingReader extends Reader {

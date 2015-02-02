@@ -29,7 +29,7 @@ import java.io.IOException;
  * MESSAGE if a message has arrived
  * CLOSED if the connection has recently been closed.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  */
 public class ConnectionMessage {
 

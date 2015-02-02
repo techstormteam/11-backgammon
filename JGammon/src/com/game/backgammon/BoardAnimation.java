@@ -26,7 +26,7 @@ import java.awt.*;
  *
  * It is one in a thread of its own.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
 public class BoardAnimation extends Thread {

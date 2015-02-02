@@ -4,7 +4,7 @@ package com.game.backgammon;
  * a connectionListener handles Messages that came over the
  * connection
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
 public interface ConnectionListener {

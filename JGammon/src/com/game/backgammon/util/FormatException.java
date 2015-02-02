@@ -21,7 +21,7 @@ package com.game.backgammon.util;
 /**
  * Wrong file format
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
 public class FormatException extends Exception {

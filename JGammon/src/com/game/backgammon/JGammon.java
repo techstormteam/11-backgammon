@@ -42,7 +42,7 @@ import javax.swing.filechooser.FileFilter;
  * The main()-method checks for commandline arguments and creates the singleton
  * object.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
 public class JGammon implements ActionListener, ConnectionListener {

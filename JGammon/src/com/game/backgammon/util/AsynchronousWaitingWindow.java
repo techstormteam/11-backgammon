@@ -41,7 +41,7 @@ import com.game.backgammon.JGammon;
  *
  * A button (eg for Abort) can be added and checked for pressing.
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
 public class AsynchronousWaitingWindow extends JDialog {
