@@ -279,6 +279,7 @@ public class Game implements Runnable {
                                 msg.getString("undone"));
                         setSnapshot(undoSnapshot);
                         applySnapshot(undoSnapshot);
+                        getJGam().getFrame().disableButtons();
                     }
                 }
             }

@@ -59,7 +59,6 @@ public class JGamFrame extends JFrame {
     private JButton buttonRoll = new JButton();
     private JButton buttonUndo = new JButton();
     private JLabel label = new JLabel();
-    private ImageIcon imageDice = new ImageIcon();
     private Board board;
     private Color bgColor = new Color(199,199,207);
     private JGammon jGam;
@@ -91,15 +90,13 @@ public class JGamFrame extends JFrame {
      */
     private void jbInit() throws Exception {
         contentPane = (JPanel) getContentPane();
-        imageDice = new ImageIcon(com.game.backgammon.JGamFrame.class.getResource("img/dice.gif"));
         contentPane.setLayout(borderLayout1);
         setTitle("Backgammon - " + JGammon.AUTHOR);
         this.addWindowListener(new JGamFrame_this_windowAdapter(this));
         buttonNew.setActionCommand("newgame");
         buttonNew.setText(msg.getString("newgame"));
         buttonRoll.setActionCommand("roll");
-        buttonRoll.setIcon(imageDice);
-        buttonRoll.setText(msg.getString("roll"));
+        buttonRoll.setText("Finish");
         buttonNew.addActionListener(jGam);
         buttonRoll.addActionListener(jGam);
         buttonUndo.addActionListener(jGam);
@@ -123,7 +120,7 @@ public class JGamFrame extends JFrame {
         jToolBar.add(buttonUndo, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
-        jToolBar.add(buttonRoll, new GridBagConstraints(5, 0, 1, 2, 0.0, 0.0
+        jToolBar.add(buttonRoll, new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         jToolBar.add(buttonNew, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0
@@ -143,13 +140,21 @@ public class JGamFrame extends JFrame {
         return board;
     }
 
-    public void enableButtons(boolean rollOnly) {
-        buttonRoll.setEnabled(true);
+    public void enableButtons() {
+    	buttonRoll.setEnabled(true);
+    }
+    
+    public void enableUndoButton() {
+        buttonUndo.setEnabled(true);
+    }
+    
+    public void disableUndoButton() {
+        buttonUndo.setEnabled(false);
     }
 
     public void disableButtons() {
        buttonRoll.setEnabled(false);
-
+       buttonUndo.setEnabled(false);
     }
 
     public void closed() {

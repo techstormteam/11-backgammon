@@ -168,37 +168,13 @@ public class LocalPlayer extends Player {
             InterruptedException {
 
         int ret = -1;
-        getGame().getJGam().getFrame().enableButtons(rollOnly);
+        getGame().getJGam().getFrame().enableButtons();
 
         while (ret == -1) {
             wait();
             if (lastMessage.equals("roll")) {
                 ret = ROLL;
-            } else if (lastMessage.equals("double")) {
-                if (getGame().mayDouble(this)) {
-                    ret = DOUBLE;
-                } else {
-                    JOptionPane.showMessageDialog(getGame().getJGam().getFrame(),
-                                                  msg.getString(
-                            "doublenotallowed"));
-                }
-            } else if (lastMessage.equals("giveup")) {
-                String answer = (String)
-                                JOptionPane.showInputDialog(getGame().getJGam().
-                        getFrame(),
-                        msg.getString("proposeGiveup"),
-                        msg.getString("choose"),
-                        JOptionPane.PLAIN_MESSAGE,
-                        getChipIcon(), giveups, giveups[0]);
-                if (answer != null) {
-                    if (answer.equals(getLevelName(ORDINARY))) {
-                        ret = GIVE_UP;
-                    } else if (answer.equals(getLevelName(GAMMON))) {
-                        ret = GIVE_UP_GAMMON;
-                    } else if (answer.equals(getLevelName(BACKGAMMON))) {
-                        ret = GIVE_UP_BACKGAMMON;
-                    }
-                }
+                getGame().getJGam().getFrame().disableUndoButton();
             }
         }
 
