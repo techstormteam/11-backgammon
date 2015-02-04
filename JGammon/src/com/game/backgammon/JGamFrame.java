@@ -56,8 +56,8 @@ public class JGamFrame extends JFrame {
     private BorderLayout borderLayout1 = new BorderLayout();
     private JPanel jToolBar = new JPanel();
     private JButton buttonNew = new JButton();
-    private JButton buttonGiveUp = new JButton();
     private JButton buttonRoll = new JButton();
+    private JButton buttonUndo = new JButton();
     private JLabel label = new JLabel();
     private ImageIcon imageDice = new ImageIcon();
     private Board board;
@@ -97,14 +97,15 @@ public class JGamFrame extends JFrame {
         this.addWindowListener(new JGamFrame_this_windowAdapter(this));
         buttonNew.setActionCommand("newgame");
         buttonNew.setText(msg.getString("newgame"));
-        buttonGiveUp.setActionCommand("giveup");
-        buttonGiveUp.setText(msg.getString("giveup"));
         buttonRoll.setActionCommand("roll");
         buttonRoll.setIcon(imageDice);
         buttonRoll.setText(msg.getString("roll"));
         buttonNew.addActionListener(jGam);
-        buttonGiveUp.addActionListener(jGam);
         buttonRoll.addActionListener(jGam);
+        buttonUndo.addActionListener(jGam);
+        buttonUndo.setEnabled(true);
+        buttonUndo.setActionCommand("undo");
+        buttonUndo.setText("Undo");
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setText(msg.getString("welcome") + " Backgammon " + JGammon.VERSION + " - " +  JGammon.AUTHOR);
         jToolBar.setBackground(bgColor);
@@ -119,7 +120,7 @@ public class JGamFrame extends JFrame {
         jToolBar.add(label, new GridBagConstraints(3, 0, 1, 2, 1.0, 1.0
                 , GridBagConstraints.WEST, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
-        jToolBar.add(buttonGiveUp, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0
+        jToolBar.add(buttonUndo, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         jToolBar.add(buttonRoll, new GridBagConstraints(5, 0, 1, 2, 0.0, 0.0
@@ -143,14 +144,10 @@ public class JGamFrame extends JFrame {
     }
 
     public void enableButtons(boolean rollOnly) {
-        if(!rollOnly) {
-            buttonGiveUp.setEnabled(true);
-        }
         buttonRoll.setEnabled(true);
     }
 
     public void disableButtons() {
-           buttonGiveUp.setEnabled(false);
        buttonRoll.setEnabled(false);
 
     }

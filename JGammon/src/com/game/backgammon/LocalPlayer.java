@@ -113,9 +113,10 @@ public class LocalPlayer extends Player {
      * wait till i am waked up and then go for it ...
      *
      * @return Move
+     * @throws UndoException 
      * @todo Implement this jgam.Player method
      */
-    synchronized public Move move() throws InterruptedException {
+    synchronized public Move move() throws InterruptedException, UndoException {
         while (true) {
             allowMoves = true;
             wait();
@@ -123,6 +124,9 @@ public class LocalPlayer extends Player {
             if (lastMessage instanceof Move) {
                 Move m = (Move) lastMessage;
                 return m;
+            }
+            if (lastMessage.equals("undo")) {
+                throw new UndoException(true);
             }
         }
     }

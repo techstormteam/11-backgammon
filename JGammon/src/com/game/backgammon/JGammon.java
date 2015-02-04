@@ -76,8 +76,6 @@ public class JGammon implements ActionListener, ConnectionListener {
 
         try {
             System.getProperties().load(new FileInputStream("jgam.properties"));
-            // we are still beta. ... better log ...
-            // System.getProperties().setProperty("jgam.debug", "true");
         } catch (IOException ex) {} // egal
 
         String mode = null;
