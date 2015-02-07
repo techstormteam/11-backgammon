@@ -26,11 +26,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
-
-import com.game.backgammon.util.AsynchronousWaitingWindow;
 
 /**
  * This is the game itsself - the logic etc.
@@ -77,7 +74,6 @@ public class Game implements Runnable {
 
     private int dice[];
 
-    private ResourceBundle msg = ResourceBundle.getBundle("com.game.backgammon.msg.Game");
     private MessageFormat msgFormat = new MessageFormat("");
 
     public Game(Player p1, Player p2, JGammon jgam) throws
@@ -95,7 +91,7 @@ public class Game implements Runnable {
         return player1;
     }
 
-    public Player getPlayerBlue() {
+    public Player getPlayerBlack() {
         return player2;
     }
 
@@ -147,7 +143,7 @@ public class Game implements Runnable {
     }
 
     private void chooseBeginner() throws  IOException {
-        jgam.getFrame().setLabel(msg.getString("choosing"));
+        jgam.getFrame().setLabel("Choosing the beginner");
         jgam.getFrame().setIcon(null);
         int d[];
         do {
@@ -224,10 +220,8 @@ public class Game implements Runnable {
         while (step != Player.ROLL) {
             history.add(new HistoryMessage(step, currentPlayer));
             boolean answer;
-            jgam.getFrame().setLabel(msgFormat.format(msg.getString(
-                    "wait"),
+            jgam.getFrame().setLabel(msgFormat.format("Waiting for {0}''s answer",
                     new Object[] {getOtherPlayer().getName()}));
-            jgam.getFrame().setIcon(AsynchronousWaitingWindow.clock);
             answer = getOtherPlayer().acceptsOffer(step);
             setCurrentPlayerLabel();
             history.add(new HistoryMessage(answer ? "Accept." :
@@ -255,7 +249,7 @@ public class Game implements Runnable {
         dice = rollDice(2);
         currentPlayer.setDice(dice);
         undoSnapshot = new BoardSnapshot(this);
-	undoPlayer = currentPlayer;
+        undoPlayer = currentPlayer;
 
     }
 
@@ -276,7 +270,7 @@ public class Game implements Runnable {
                 } catch (UndoException ex) {
                     if(!undoSnapshot.equals(new BoardSnapshot(this))) {
                         JOptionPane.showMessageDialog(jgam.getFrame(),
-                                msg.getString("undone"));
+                                "The last moves have been undone");
                         setSnapshot(undoSnapshot);
                         applySnapshot(undoSnapshot);
                         getJGam().getFrame().disableButtons();
@@ -286,14 +280,20 @@ public class Game implements Runnable {
 
             jgam.getFrame().repaint();
             // somewon has won.
-            msgFormat.applyPattern(msg.getString("wins" + winType));
+            if (winType == 1) {
+            	msgFormat.applyPattern("{0} wins an ordinary game.");
+            } else if (winType == 2) {
+            	msgFormat.applyPattern("{0} wins a GAMMON game.");
+            } else if (winType == 3) {
+            	msgFormat.applyPattern("{0} wins a BACKGAMMON game.");
+            }
             String M = msgFormat.format(new Object[] {winner.getName()});
 
             int value = getDoubleValue() * winType;
-            msgFormat.applyPattern(msg.getString("worth"));
+            msgFormat.applyPattern("This game is {0,number,integer} points worth.");
             M += " " + msgFormat.format(new Object[] {new Integer(value)});
             JOptionPane.showMessageDialog(jgam.getFrame(), M,
-                                          msg.getString("gameover"),
+                                          "GAME OVER",
                                           JOptionPane.
                                           INFORMATION_MESSAGE,
                                           winner.getChipIcon());
@@ -325,7 +325,7 @@ public class Game implements Runnable {
     }
 
     private void setCurrentPlayerLabel() {
-        msgFormat.applyPattern(msg.getString("turn"));
+        msgFormat.applyPattern("{0}''s turn ({1})");
         String M = msgFormat.format(new Object[] {
                                     currentPlayer.getName(),
                                     currentPlayer.getColor()});

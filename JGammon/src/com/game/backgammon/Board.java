@@ -97,7 +97,7 @@ public class Board extends JComponent {
     /**
      * paint the board.
      * Player 1 white
-     * Player 2 blue
+     * Player 2 black
      * @param g Graphics
      */
     public void paint(Graphics g) {
@@ -114,9 +114,9 @@ public class Board extends JComponent {
         }
 
         // the other
-        p = game.getPlayerBlue();
+        p = game.getPlayerBlack();
         for (int i = 1; i <= 24; i++) {
-            paintJag(blueChip, g, 25 - i, p.getJagWithDragging(i));
+            paintJag(blackChip, g, 25 - i, p.getJagWithDragging(i));
         }
 
         // the dice
@@ -131,30 +131,23 @@ public class Board extends JComponent {
         }
 
         // player 2
-        d = game.getPlayerBlue().getShownDice();
+        d = game.getPlayerBlack().getShownDice();
         if (d != null) {
             for (int i = 0; i < d.length; i++) {
                 int x = size.width - (DICE_POINT.x + DICE_DIST * i) - 49;
-                g.drawImage(blueDice[d[i] - 1].getImage(), x,
+                g.drawImage(blackDice[d[i] - 1].getImage(), x,
                             DICE_POINT.y, this);
             }
         }
 
-        // the outs
-        paintOut(whiteChipThin, game.getPlayerWhite(), g);
-        paintOut(blueChipThin, game.getPlayerBlue(), g);
-
         // the bar
         if(flipTopBottom) {
             paintJag(whiteChip, g, 0, game.getPlayerWhite().getJagWithDragging(25));
-            paintJag(blueChip, g, 25, game.getPlayerBlue().getJagWithDragging(25));
+            paintJag(blackChip, g, 25, game.getPlayerBlack().getJagWithDragging(25));
         } else {
             paintJag(whiteChip, g, 25, game.getPlayerWhite().getJagWithDragging(25));
-            paintJag(blueChip, g, 0, game.getPlayerBlue().getJagWithDragging(25));
+            paintJag(blackChip, g, 0, game.getPlayerBlack().getJagWithDragging(25));
         }
-
-        // the doubleDice
-        paintDoubleDice(g);
 
         // dragged objects
         mouseListener.drawDraged(g);
@@ -162,31 +155,6 @@ public class Board extends JComponent {
         // animation
         if (boardAnimation != null) {
             boardAnimation.paint(g);
-        }
-    }
-
-    /**
-     * @todo perhaps better make 6 pngs ...
-     * @param g Graphics
-     */
-    private void paintDoubleDice(Graphics g) {
-        Game game = getGame();
-        int doubleValue = game.getDoubleValue();
-        if (doubleValue != 1) {
-            // get the corresponding icon
-            ImageIcon theIcon = doubleDice[log2(doubleValue)-1];
-
-            // prepare the number
-            int xpos = (size.width - theIcon.getIconWidth()) / 2;
-            int ypos;
-            if (game.mayDouble(game.getPlayerWhite()) == flipTopBottom) {
-                ypos = size.height - DOUBLE_OFFSET - theIcon.getIconHeight();
-            } else {
-                ypos = DOUBLE_OFFSET;
-            }
-
-            g.drawImage(theIcon.getImage(), xpos, ypos, this);
-
         }
     }
 
@@ -361,7 +329,7 @@ public class Board extends JComponent {
 
     /**
      * return true if the player has his home in the upper half of the board.
-     * this is the case if not vert-flipped and white or flipped and blue
+     * this is the case if not vert-flipped and white or flipped and black
      * @param player Player
      * @return boolean
      */
@@ -376,24 +344,17 @@ public class Board extends JComponent {
             "img/background.png"));
     static ImageIcon whiteChip = new ImageIcon(Board.class.getResource(
             "img/whiteChip.png"));
-    static ImageIcon blueChip = new ImageIcon(Board.class.getResource(
-            "img/blueChip.png"));
-    static ImageIcon whiteChipThin = new ImageIcon(Board.class.getResource(
-            "img/whiteChipThin.gif"));
-    static ImageIcon blueChipThin = new ImageIcon(Board.class.getResource(
-            "img/blueChipThin.gif"));
-    private static ImageIcon doubleDice[] = new ImageIcon[6];
-    private static ImageIcon[] blueDice = new ImageIcon[6];
+    static ImageIcon blackChip = new ImageIcon(Board.class.getResource(
+            "img/blackChip.png"));
+    private static ImageIcon[] blackDice = new ImageIcon[6];
     private static ImageIcon[] whiteDice = new ImageIcon[6];
 
     static {
         for (int i = 1; i <= 6; i++) {
-            blueDice[i - 1] = new ImageIcon(Board.class.getResource(
-                    "img/blue" + i + ".png"));
+            blackDice[i - 1] = new ImageIcon(Board.class.getResource(
+                    "img/black" + i + ".png"));
             whiteDice[i - 1] = new ImageIcon(Board.class.getResource(
                     "img/white" + i + ".png"));
-            doubleDice[i-1] = new ImageIcon(Board.class.getResource(
-                    "img/doubleDice"+(1<<i)+".png"));
         }
     }
 

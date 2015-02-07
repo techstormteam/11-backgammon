@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import com.game.backgammon.util.IntList;
 
@@ -380,15 +379,15 @@ public abstract class Player {
     }
 
     /**
-     * player 1 is white, player 2 is blue
-     * @return String "blue" or "white"
+     * player 1 is white, player 2 is black
+     * @return String "black" or "white"
      */
     public String getColor() {
         return isWhite() ? "white" : "black";
     }
 
     public javax.swing.ImageIcon getChipIcon() {
-        return isWhite() ? Board.whiteChip : Board.blueChip;
+        return isWhite() ? Board.whiteChip : Board.blackChip;
     }
 
     /**

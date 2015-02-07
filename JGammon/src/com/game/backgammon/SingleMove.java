@@ -18,9 +18,10 @@
  */
 package com.game.backgammon;
 
-import java.util.regex.*;
-import java.text.ParseException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Objects of class Move describe a Move in the Backgammon game.

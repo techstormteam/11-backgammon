@@ -114,8 +114,6 @@ public class JGammon implements ActionListener, ConnectionListener {
                 } else if (args[cur].equalsIgnoreCase("-help")) {
                     help();
                     System.exit(0);
-                } else if (args[cur].equalsIgnoreCase("-hint")) {
-                    HintFrame.showHintFrame();
                 } else
                 {
                     System.err.println("Unknown commandline option: " +

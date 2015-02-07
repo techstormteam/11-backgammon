@@ -67,7 +67,7 @@ import com.game.backgammon.util.FormatException;
  *  History
  * @todo transmit history over the connection and save/load in files
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
 public class BoardSnapshot {
@@ -167,7 +167,7 @@ public class BoardSnapshot {
      */
     public BoardSnapshot(Game game) {
         whiteBoard = game.getPlayerWhite().getBoard();
-        blueBoard = game.getPlayerBlue().getBoard();
+        blueBoard = game.getPlayerBlack().getBoard();
         whitesTurn = (game.getCurrentPlayer() == game.getPlayerWhite());
         doubleCube = game.getDoubleValue();
         doubleCube *= (game.mayDouble(game.getPlayerWhite()) ? 1 : -1);

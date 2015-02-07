@@ -162,8 +162,9 @@ public class ComputerPlayer extends Player {
     
     private List<Move> getAllMovesInCurrentStep() {
     	List<Move> moves = new ArrayList<Move>();
-    	for (int startJag = 1; startJag <= 24; startJag++) {
-	    	List possibleMoves = getPossibleMovesFrom(startJag);
+    	for (int startJag = 0; startJag <= 25; startJag++) {
+    		int jag = adjustJag(startJag);
+	    	List possibleMoves = getPossibleMovesFrom(jag);
 	        Collections.sort(possibleMoves);
 	        if (possibleMoves != null) {
 	            for (Iterator iter = possibleMoves.iterator(); iter.hasNext(); ) {
