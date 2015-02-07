@@ -54,8 +54,6 @@ public abstract class Player {
     private Game game;
     private int shownDice[];
 
-    private ResourceBundle msg = ResourceBundle.getBundle("com.game.backgammon.msg.Player");
-
     // 0:off  1:24 board  25:bar
     private int board[];
     // one chip can be dragged arround
@@ -386,7 +384,7 @@ public abstract class Player {
      * @return String "blue" or "white"
      */
     public String getColor() {
-        return msg.getString(isWhite() ? "white" : "blue");
+        return isWhite() ? "white" : "black";
     }
 
     public javax.swing.ImageIcon getChipIcon() {

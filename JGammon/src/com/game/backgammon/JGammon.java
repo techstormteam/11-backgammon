@@ -55,8 +55,6 @@ public class JGammon implements ActionListener, ConnectionListener {
 
     private static JGammon theJGammon;
 
-    private ResourceBundle msg = ResourceBundle.getBundle("com.game.backgammon.msg.JGam");
-
     /**
      * Construct and show the application.
      */
@@ -211,8 +209,8 @@ public class JGammon implements ActionListener, ConnectionListener {
 
             if (game != null) {
                 if (JOptionPane.showConfirmDialog(getFrame(),
-                                                  msg.getString("gameabort"),
-                                                  msg.getString("newgame"),
+                                                  "There is a game. Abort it?",
+                                                  "Start a new game",
                                                   JOptionPane.YES_NO_OPTION)
                     == JOptionPane.YES_OPTION) {
                     clearGame();
@@ -231,8 +229,8 @@ public class JGammon implements ActionListener, ConnectionListener {
         } else if (command.equals("close")) {
             if (game != null) {
                 if(JOptionPane.showConfirmDialog(getFrame(),
-                                              msg.getString("gameabort"),
-                                              msg.getString("quit"),
+                                              "There is a game. Abort it?",
+                                              "Quit program",
                                               JOptionPane.YES_NO_OPTION)
                         == JOptionPane.YES_OPTION) {
                     exit(0);
@@ -294,7 +292,7 @@ public class JGammon implements ActionListener, ConnectionListener {
         }
 
         public String getDescription() {
-            return msg.getString("boardFilter");
+            return "Saved backgammon boards (*.board)";
         }
     };
 

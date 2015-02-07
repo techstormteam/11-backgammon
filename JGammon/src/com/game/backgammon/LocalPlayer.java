@@ -38,7 +38,6 @@ public class LocalPlayer extends Player {
     /** used for commication betw. threads */
     private Object lastMessage;
 
-    private ResourceBundle msg = ResourceBundle.getBundle("com.game.backgammon.msg.Player");
     private MessageFormat msgFormat = new MessageFormat("");
 
     /** if this is true
@@ -64,26 +63,26 @@ public class LocalPlayer extends Player {
 
         JFrame frame = getGame().getJGam().getFrame();
         if (offer == DOUBLE) {
-            msgFormat.applyPattern(msg.getString("confirmDouble"));
+            msgFormat.applyPattern("{0} proposes a point doubling. The game will then be worth {1, number} points. Do you accept?");
             String M = msgFormat.format(new Object[] {
                                         getOtherPlayer().getName(),
                                         new Integer(2 *
                     getGame().getDoubleValue())});
 
             return JOptionPane.showConfirmDialog(frame, M,
-                                                 msg.getString("confirm"),
+            									 "Please confirm",
                                                  JOptionPane.YES_NO_OPTION,
                                                  JOptionPane.QUESTION_MESSAGE,
                                                  getChipIcon()) ==
                     JOptionPane.YES_OPTION;
         } else {
-            msgFormat.applyPattern(msg.getString("confirmGiveup"));
+            msgFormat.applyPattern("{0} chose to give up. He proposes a {1}. Do you accept?");
             String M = msgFormat.format(new Object[] {
                                         getOtherPlayer().getName(),
                                         getLevelName(offer)});
 
             return JOptionPane.showConfirmDialog(frame, M,
-                                                 msg.getString("confirm"),
+                                                 "Please confirm",
                                                  JOptionPane.YES_NO_OPTION,
                                                  JOptionPane.QUESTION_MESSAGE,
                                                  getChipIcon()) ==
@@ -99,9 +98,9 @@ public class LocalPlayer extends Player {
      */
     private String getLevelName(int offer) {
         switch(offer) {
-        case ORDINARY: return msg.getString("ordinary");
-        case GAMMON: return msg.getString("gammon");
-        case BACKGAMMON: return msg.getString("backgammon");
+        case ORDINARY: return "ORDINARY";
+        case GAMMON: return "GAMMON";
+        case BACKGAMMON: return "BACKGAMMON";
         }
         throw new IllegalArgumentException(Integer.toString(offer));
     }

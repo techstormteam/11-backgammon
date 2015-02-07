@@ -51,8 +51,6 @@ import javax.swing.event.ChangeListener;
  */
 public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
     private JPanel panel1 = new JPanel();
-    private ResourceBundle msg = ResourceBundle.getBundle(
-            "com.game.backgammon.msg.NewGameDialog");
     private JRadioButton RBlocal = new JRadioButton();
     private GridBagLayout gridBagLayout1 = new GridBagLayout();
     private Component component1 = Box.createHorizontalStrut(8);
@@ -75,7 +73,7 @@ public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
     public NewGameDialog(JGammon jgam) {
         super(jgam.getFrame(), true);
         this.jgam = jgam;
-        setTitle(msg.getString("newgame"));
+        setTitle("Start a new Game");
         try {
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             jbInit();
@@ -107,17 +105,17 @@ public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
 
         panel1.setLayout(gridBagLayout1);
         RBlocal.setSelected(true);
-        RBlocal.setText(msg.getString("local"));
+        RBlocal.setText("Player vs. Computer");
         RBlocal.addChangeListener(changeListener);
-        jLabel1.setText(msg.getString("whitename"));
-        jLabel2.setText(msg.getString("bluename"));
-        cancel.setText(msg.getString("cancel"));
+        jLabel1.setText("Player is White");
+        jLabel2.setText("Computer is Black");
+        cancel.setText("Cancel");
         cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
             }
         });
-        OK.setText(msg.getString("OK"));
+        OK.setText("OK");
         OK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 okPressed = true;
@@ -182,13 +180,13 @@ public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this,
-                                              msg.getString("errorPort"),
-                                              msg.getString("error"),
+                                              "Ports must be numbers between 0 and 65535",
+                                              "Error",
                                               JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, ex,
-                                              msg.getString("error"),
+                                              "Error",
                                               JOptionPane.ERROR_MESSAGE);
 
             }

@@ -66,7 +66,6 @@ public class JGamFrame extends JFrame {
     private Component component3 = Box.createHorizontalStrut(8);
     private JPanel bottomPanel = new JPanel();
     
-    private ResourceBundle msg = ResourceBundle.getBundle("com.game.backgammon.msg.JGamFrame");
     private GridBagLayout gridBagLayout2 = new GridBagLayout();
 
     public JGamFrame(JGammon jgam) {
@@ -94,7 +93,7 @@ public class JGamFrame extends JFrame {
         setTitle("Backgammon - " + JGammon.AUTHOR);
         this.addWindowListener(new JGamFrame_this_windowAdapter(this));
         buttonNew.setActionCommand("newgame");
-        buttonNew.setText(msg.getString("newgame"));
+        buttonNew.setText("New Game");
         buttonRoll.setActionCommand("roll");
         buttonRoll.setText("Finish");
         buttonNew.addActionListener(jGam);
@@ -104,7 +103,7 @@ public class JGamFrame extends JFrame {
         buttonUndo.setActionCommand("undo");
         buttonUndo.setText("Undo");
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setText(msg.getString("welcome") + " Backgammon " + JGammon.VERSION + " - " +  JGammon.AUTHOR);
+        label.setText("Welcome to" + " Backgammon " + JGammon.VERSION + " - " +  JGammon.AUTHOR);
         jToolBar.setBackground(bgColor);
         jToolBar.setLayout(gridBagLayout1);
         bottomPanel.setLayout(gridBagLayout2);
