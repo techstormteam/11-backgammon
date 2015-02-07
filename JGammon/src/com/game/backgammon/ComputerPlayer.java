@@ -20,6 +20,11 @@
 package com.game.backgammon;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
@@ -33,7 +38,7 @@ import javax.swing.JOptionPane;
  *
  * @author Aviv
  */
-public class LocalPlayer extends Player {
+public class ComputerPlayer extends Player {
 
     /** used for commication betw. threads */
     private Object lastMessage;
@@ -46,7 +51,7 @@ public class LocalPlayer extends Player {
      */
     private boolean allowMoves;
 
-    public LocalPlayer(String name) {
+    public ComputerPlayer(String name) {
         super(name);
     }
 
@@ -117,20 +122,60 @@ public class LocalPlayer extends Player {
      * @todo Implement this jgam.Player method
      */
     synchronized public Move move() throws InterruptedException, UndoException {
-        while (true) {
-            allowMoves = true;
-            wait();
-            allowMoves = false;
-            if (lastMessage instanceof Move) {
-                Move m = (Move) lastMessage;
-                return m;
-            }
-            if (lastMessage.equals("undo")) {
-                throw new UndoException(true);
-            }
-        }
+//        while (true) {
+//            allowMoves = true;
+//            wait();
+//            allowMoves = false;
+//            if (lastMessage instanceof Move) {
+//                Move m = (Move) lastMessage;
+//                return m;
+//            }
+//            if (lastMessage.equals("undo")) {
+//                throw new UndoException(true);
+//            }
+//        }
+        
+    	
+        Move move = getBestMove();
+        getGame().handle(move);
+        return move;
     }
 
+    private int randomInteger(int aStart, int aEnd, Random aRandom){
+        if (aStart > aEnd) {
+          throw new IllegalArgumentException("Start cannot exceed End.");
+        }
+        //get the range, casting to long to avoid overflow problems
+        long range = (long)aEnd - (long)aStart + 1;
+        // compute a fraction of the range, 0 <= frac < range
+        long fraction = (long)(range * aRandom.nextDouble());
+        int randomNumber =  (int)(fraction + aStart);
+        return randomNumber;
+    }
+    
+    private Move getBestMove() {
+    	Move decision = null;
+    	List<Move> moves = getAllMovesInCurrentStep();
+    	Random rand = new Random();
+    	decision = moves.get(randomInteger(0, moves.size() - 1, rand));
+    	return decision;
+    }
+    
+    private List<Move> getAllMovesInCurrentStep() {
+    	List<Move> moves = new ArrayList<Move>();
+    	for (int startJag = 1; startJag <= 24; startJag++) {
+	    	List possibleMoves = getPossibleMovesFrom(startJag);
+	        Collections.sort(possibleMoves);
+	        if (possibleMoves != null) {
+	            for (Iterator iter = possibleMoves.iterator(); iter.hasNext(); ) {
+	                Move move = (Move) iter.next();
+	                moves.add(move);
+	            }
+	        }
+    	}
+    	return moves;
+    }
+    
     /**
      * a message is passed from the awtthread.
      *
@@ -167,19 +212,19 @@ public class LocalPlayer extends Player {
     synchronized public int nextStep(boolean rollOnly) throws
             InterruptedException {
 
-//        int ret = -1;
-//        getGame().getJGam().getFrame().enableButtons();
-//
-//        while (ret == -1) {
-//            wait();
-//            if (lastMessage.equals("roll")) {
-//                ret = ROLL;
-//                getGame().getJGam().getFrame().disableUndoButton();
-//            }
-//        }
-//
+        int ret = -1;
+        getGame().getJGam().getFrame().enableButtons();
+
+        while (ret == -1) {
+            wait();
+            if (lastMessage.equals("roll")) {
+                ret = ROLL;
+                getGame().getJGam().getFrame().disableUndoButton();
+            }
+        }
+
         getGame().getJGam().getFrame().disableButtons();
-        return ROLL;
+        return ret;
 
     }
 

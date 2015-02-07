@@ -320,7 +320,7 @@ public class Game implements Runnable {
     }
 
     synchronized private void switchPlayers() {
-        currentPlayer = getOtherPlayer();
+		currentPlayer = getOtherPlayer();
         setCurrentPlayerLabel();
     }
 
@@ -331,9 +331,9 @@ public class Game implements Runnable {
                                     currentPlayer.getColor()});
         jgam.getFrame().setLabel(M);
         if (currentPlayer.isRemote()) {
-            jgam.getFrame().setIcon(AsynchronousWaitingWindow.clock);
+            //jgam.getFrame().setIcon(AsynchronousWaitingWindow.clock);
         } else {
-            jgam.getFrame().setIcon(currentPlayer.getChipIcon());
+            //jgam.getFrame().setIcon(currentPlayer.getChipIcon());
         }
     }
 

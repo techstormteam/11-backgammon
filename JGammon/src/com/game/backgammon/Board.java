@@ -404,7 +404,7 @@ public class Board extends JComponent {
      */
     static final int JAGWIDTH = 48;
     static final int JAGHEIGHT = 270;
-    static final int OUTHEIGHT = 280;
+    static final int OUTHEIGHT = 400;
     // instead of chipdiameter often jagwidth is used being the same
     static final int CHIPDIAMETER = 48;
     static final int CHIPTHICKNESS = 15;

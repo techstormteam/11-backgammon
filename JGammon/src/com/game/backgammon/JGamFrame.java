@@ -108,7 +108,15 @@ public class JGamFrame extends JFrame {
         jToolBar.setBackground(bgColor);
         jToolBar.setLayout(gridBagLayout1);
         bottomPanel.setLayout(gridBagLayout2);
+//        JPanel panel = new JPanel();
+//        panel.setLayout(null);
+//        panel.add(board);
+//        panel.add(buttonNew);
+//        panel.setBounds(0, 0, 200, 200);
+//        board.setLocation(0, 0);
+//        buttonNew.setLocation(0, 50);
         contentPane.add(board, java.awt.BorderLayout.CENTER);
+//        contentPane.add(buttonNew, java.awt.BorderLayout.CENTER);
         contentPane.add(bottomPanel, java.awt.BorderLayout.SOUTH);
         contentPane.add(jToolBar, java.awt.BorderLayout.NORTH);
         jToolBar.add(component3, new GridBagConstraints(3, 1, 1, 2, 0.0, 0.0
@@ -126,6 +134,7 @@ public class JGamFrame extends JFrame {
         jToolBar.add(buttonNew, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0
                 , GridBagConstraints.WEST, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
+        
     }
 
     public void setLabel(String string) {

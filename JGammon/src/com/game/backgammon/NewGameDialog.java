@@ -55,26 +55,17 @@ public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
             "com.game.backgammon.msg.NewGameDialog");
     private JRadioButton RBlocal = new JRadioButton();
     private GridBagLayout gridBagLayout1 = new GridBagLayout();
-    private JRadioButton RBnetwork = new JRadioButton();
-    private JRadioButton RBserverWhite = new JRadioButton();
     private Component component1 = Box.createHorizontalStrut(8);
     private JLabel jLabel1 = new JLabel();
-    private JTextField name1 = new JTextField();
     private JLabel jLabel2 = new JLabel();
-    private JTextField name2 = new JTextField();
-    private JRadioButton RBserverBlue = new JRadioButton();
     private JButton cancel = new JButton();
     private JButton OK = new JButton();
     private JLabel jLabel6 = new JLabel();
-    private JLabel jLabel7 = new JLabel();
     private ButtonGroup topGroup = new ButtonGroup();
     private ButtonGroup remoteGroup = new ButtonGroup();
 
     private ImageIcon local = new ImageIcon(NewGameDialog.class.getResource(
-            "/com/game/backgammon/img/local.gif"));
-    private ImageIcon serverIcon = new ImageIcon(NewGameDialog.class.
-                                                 getResource(
-            "/com/game/backgammon/img/server.gif"));
+            "/com/game/backgammon/img/local.png"));
 
     private boolean okPressed = false;
     private JGammon jgam;
@@ -118,19 +109,8 @@ public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
         RBlocal.setSelected(true);
         RBlocal.setText(msg.getString("local"));
         RBlocal.addChangeListener(changeListener);
-        RBnetwork.addChangeListener(changeListener);
-        RBserverBlue.addChangeListener(changeListener);
-        RBserverWhite.addChangeListener(changeListener);
-        RBnetwork.setToolTipText("");
-        RBnetwork.setText(msg.getString("network"));
-        RBserverWhite.setText(msg.getString("whiteServer"));
         jLabel1.setText(msg.getString("whitename"));
-        name1.setPreferredSize(new Dimension(110, 20));
-        name1.setText("Anastasia");
         jLabel2.setText(msg.getString("bluename"));
-        name2.setPreferredSize(new Dimension(110, 20));
-        name2.setText("Basil");
-        RBserverBlue.setText(msg.getString("blueServer"));
         cancel.setText(msg.getString("cancel"));
         cancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -145,43 +125,19 @@ public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
             }
         });
         jLabel6.setIcon(local);
-        jLabel7.setIcon(serverIcon);
         fileNameLabel.setMaximumSize(new Dimension(150, 15));
         fileNameLabel.setPreferredSize(new Dimension(150, 15));
         RBlocal.setEnabled(true);
         topGroup.add(RBlocal);
-        topGroup.add(RBnetwork);
-        remoteGroup.add(RBserverBlue);
-        remoteGroup.add(RBserverWhite);
-        panel1.add(RBserverWhite, new GridBagConstraints(2, 4, 3, 1, 0.0, 0.0
-                , GridBagConstraints.WEST, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
         panel1.add(RBlocal, new GridBagConstraints(1, 0, 4, 1, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(20, 0, 0, 0), 2, 0));
-        panel1.add(RBserverBlue, new GridBagConstraints(2, 5, 3, 1, 0.0, 0.0
-                , GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
         panel1.add(component1, new GridBagConstraints(1, 4, 1, 1, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 20, 0));
         panel1.add(jLabel6, new GridBagConstraints(0, 0, 1, 3, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.NONE,
                 new Insets(20, 20, 20, 20), 0, 0));
-        panel1.add(name1, new GridBagConstraints(4, 1, 1, 1, 0.0, 0.0
-                                                 , GridBagConstraints.CENTER,
-                                                 GridBagConstraints.NONE,
-                                                 new Insets(0, 0, 0, 20), 0, 0));
-        panel1.add(name2, new GridBagConstraints(4, 2, 1, 1, 0.0, 0.0
-                                                 , GridBagConstraints.CENTER,
-                                                 GridBagConstraints.NONE,
-                                                 new Insets(0, 0, 0, 20), 0, 0));
-        panel1.add(jLabel7, new GridBagConstraints(0, 4, 1, 2, 0.0, 0.0
-                , GridBagConstraints.CENTER, GridBagConstraints.NONE,
-                new Insets(0, 0, 0, 0), 0, 0));
-        panel1.add(RBnetwork, new GridBagConstraints(1, 3, 4, 1, 0.0, 0.0
-                , GridBagConstraints.WEST, GridBagConstraints.NONE,
-                new Insets(20, 0, 0, 0), 0, 0));
         panel1.add(cancel, new GridBagConstraints(1, 13, 3, 1, 0.0, 0.0
                                                   , GridBagConstraints.WEST,
                                                   GridBagConstraints.NONE,
@@ -217,21 +173,10 @@ public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
 
             try {
                 if (RBlocal.isSelected()) {
-                    if (name1.getText().length() == 0) {
-                        JOptionPane.showMessageDialog(this, msg.getString("errorName1"),
-                                msg.getString("error"),
-                                JOptionPane.ERROR_MESSAGE);
-                    } else
-                    if (name2.getText().length() == 0) {
-                        JOptionPane.showMessageDialog(this, msg.getString("errorName2"),
-                                msg.getString("error"),
-                                JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        Player player1 = new LocalPlayer(name1.getText());
-                        Player player2 = new LocalPlayer(name2.getText());
+                        Player player1 = new LocalPlayer("Player");
+                        Player player2 = new ComputerPlayer("Computer");
                         Game game = new Game(player1, player2, jgam);
                         return game;
-                    }
                 } else { // network game
 
                 }
@@ -255,12 +200,8 @@ public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
     public void enableDisable() {
         boolean local = RBlocal.isSelected();
         boolean client = !local;
-        name1.setEnabled(local);
         jLabel1.setEnabled(local);
-        name2.setEnabled(local);
         jLabel2.setEnabled(local);
-        RBserverBlue.setEnabled(!local);
-        RBserverWhite.setEnabled(!local);
         fileNameLabel.setEnabled(!client || !local);
     }
 
@@ -272,22 +213,7 @@ public class NewGameDialog extends JDialog {PropertyResourceBundle r = null;
                      String name1Arg, String name2Arg, String boardFileArg) {
         if (mode.equals("local")) {
             RBlocal.setSelected(true);
-        } else {
-            RBnetwork.setSelected(true);
-            if (mode.equals("serverWhite")) {
-                RBserverWhite.setSelected(true);
-            } else if (mode.equals("serverBlue")) {
-                RBserverBlue.setSelected(true);
-            } else {
-                throw new RuntimeException("unsupported mode: " + mode);
-            }
-        }
-        if (name1Arg != null) {
-            name1.setText(name1Arg);
-        }
-        if (name2Arg != null) {
-            name2.setText(name2Arg);
-        }
+        } 
 
     }
 
