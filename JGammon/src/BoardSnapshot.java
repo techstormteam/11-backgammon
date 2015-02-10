@@ -77,7 +77,6 @@ public class BoardSnapshot {
     private String comment;
 
     private boolean whitesTurn;
-    private int doubleCube = 1;
     private int[] dice;
 
     private List history;
@@ -115,10 +114,6 @@ public class BoardSnapshot {
             whitesTurn = turnLine.equalsIgnoreCase("white");
 
             String d[] = cubeLine.split(" ");
-            doubleCube = Integer.parseInt(d[0]);
-            if (d.length == 2 && d[1].equalsIgnoreCase("blue")) {
-                doubleCube *= -1;
-            }
 
             d = diceLine.split(" ");
             if (d.length == 2) {
@@ -160,8 +155,6 @@ public class BoardSnapshot {
         whiteBoard = game.getPlayerWhite().getBoard();
         blueBoard = game.getPlayerBlack().getBoard();
         whitesTurn = (game.getCurrentPlayer() == game.getPlayerWhite());
-        doubleCube = game.getDoubleValue();
-        doubleCube *= (game.mayDouble(game.getPlayerWhite()) ? 1 : -1);
         dice = game.getDice();
         history = new LinkedList(game.getHistory());
     }
@@ -208,22 +201,6 @@ public class BoardSnapshot {
         return blueBoard;
     }
 
-    public int getDoubleDice() {
-        return Math.abs(doubleCube);
-    }
-
-    public Player getDoublePlayer(Player white, Player blue) {
-        if (doubleCube == 1) {
-            return null; // both may double
-        }
-
-        if (doubleCube > 1) {
-            return white;
-        }
-
-        return blue;
-    }
-
     public List getHistory() {
         return history;
     }
@@ -259,7 +236,6 @@ public class BoardSnapshot {
         BoardSnapshot other = (BoardSnapshot)obj;
         return (intArrayEqual(this.getBlueBoard(), other.getBlueBoard()) &&
                 intArrayEqual(this.getWhiteBoard(), other.getWhiteBoard()) &&
-                this.getDoubleDice() == other.getDoubleDice() &&
                 this.whitesTurn == other.whitesTurn &&
                 intArrayEqual(this.getDice(), other.getDice()));
     }

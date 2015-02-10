@@ -89,11 +89,12 @@ public class BoardAnimation extends Thread {
 
             player.setDragged(fromJag);
             for (int i = 0; i < nosteps; i++) {
-                Thread.sleep(SLEEPTIME);
+                
                 curX += offsetX;
                 curY += offsetY;
                 board.repaint();
-                wait(); // wait for the animation to be painted
+                Thread.sleep(SLEEPTIME);
+                //wait(); // wait for the animation to be painted
             }
         } catch (InterruptedException ex) {
         } finally {

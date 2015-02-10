@@ -210,6 +210,9 @@ public class BoardMouseListener implements MouseListener, MouseMotionListener {
                 Move move = (Move) iter.next();
                 if (move.to() == endJag) {
                     jgam.getGame().handle(move);
+                    BoardAnimation w = new BoardAnimation(jgam.getGame().getCurrentPlayer(), 2, 5);
+                    jgam.getGame().getBoard().setAnimation(w);
+                    w.animate(jgam.getGame().getBoard());
                     jgam.getGame().getJGam().getFrame().enableUndoButton();
                     break;
                 }

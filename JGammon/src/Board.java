@@ -52,6 +52,7 @@ public class Board extends JComponent {
     private boolean flipLeftRight = true;
 
     public Board(JGammon jGam) {
+    	
         this.jGam = jGam;
         mouseListener = new BoardMouseListener(this, jGam);
     }

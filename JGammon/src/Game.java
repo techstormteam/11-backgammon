@@ -63,9 +63,6 @@ public class Game implements Runnable {
     // the player that may undo
     private Player undoPlayer;
 
-    private int doubleDice = 1;
-    private Player doublePlayer;
-
     private Player winner = null;
     public static final int SIMPLE_WIN = Player.ORDINARY;
     public static final int GAMMON_WIN = Player.GAMMON;
@@ -143,27 +140,14 @@ public class Game implements Runnable {
     }
 
     private void chooseBeginner() throws  IOException {
-        jgam.getFrame().setLabel("Choosing the beginner");
-        jgam.getFrame().setIcon(null);
-        int d[];
-        do {
-            d = rollDice(2);
-            player1.setDice(d[0]);
-            player2.setDice(d[1]);
-        } while (d[0] == d[1]);
-
-        if (d[0] > d[1]) {
-            currentPlayer = player1;
-        } else {
-            currentPlayer = player2;
-        }
+        currentPlayer = player2; // player go first
 
         // we set the dice
         // but we show the original result!
-        dice = d;
+        dice = rollDice(2);
         currentPlayer.setPossibleHops(dice);
         snapshot = undoSnapshot = new BoardSnapshot(this);
-	undoPlayer = currentPlayer;
+        undoPlayer = currentPlayer;
 
     }
 
@@ -266,9 +250,6 @@ public class Game implements Runnable {
             }
             String M = msgFormat.format(new Object[] {winner.getName()});
 
-            int value = getDoubleValue() * winType;
-            msgFormat.applyPattern("This game is {0,number,integer} points worth.");
-            M += " " + msgFormat.format(new Object[] {new Integer(value)});
             JOptionPane.showMessageDialog(jgam.getFrame(), M,
                                           "GAME OVER",
                                           JOptionPane.
@@ -307,11 +288,6 @@ public class Game implements Runnable {
                                     currentPlayer.getName(),
                                     currentPlayer.getColor()});
         jgam.getFrame().setLabel(M);
-        if (currentPlayer.isRemote()) {
-            //jgam.getFrame().setIcon(AsynchronousWaitingWindow.clock);
-        } else {
-            //jgam.getFrame().setIcon(currentPlayer.getChipIcon());
-        }
     }
 
     /**
@@ -335,19 +311,6 @@ public class Game implements Runnable {
 
     public Board getBoard() {
         return jgam.getFrame().getBoard();
-    }
-
-    public boolean mayDouble(Player player) {
-        return (doublePlayer == null || player == doublePlayer)
-                && doubleDice < 64;
-    }
-
-    /**
-     * get the value of the double dice (1,2,4,8,...)
-     * @return a power of 2;
-     */
-    public int getDoubleValue() {
-        return doubleDice;
     }
 
     public List getHistory() {
@@ -411,8 +374,6 @@ public class Game implements Runnable {
     synchronized public void applySnapshot(BoardSnapshot snapshot) {
         player1.setBoard(snapshot.getWhiteBoard());
         player2.setBoard(snapshot.getBlueBoard());
-        doubleDice = snapshot.getDoubleDice();
-        doublePlayer = snapshot.getDoublePlayer(player1, player2);
         currentPlayer = snapshot.getCurrentPlayer(player1, player2);
         dice = snapshot.getDice();
         currentPlayer.setDice(dice);
