@@ -40,10 +40,10 @@ public class BoardAnimation extends Thread {
     private double offsetX, offsetY;
 
     public static final int STEPLENGTH = Integer.getInteger(
-            "jgam.animationstep", 25).intValue();
+            "jgam.animationstep", 100000).intValue();
 
     private static final long SLEEPTIME = Integer.getInteger(
-            "jgam.animationdelay", 35).intValue();
+            "jgam.animationdelay", 100000).intValue();
 
     public BoardAnimation(Player player, int from, int to) {
         this.player = player;
@@ -89,12 +89,12 @@ public class BoardAnimation extends Thread {
 
             player.setDragged(fromJag);
             for (int i = 0; i < nosteps; i++) {
-                
+            	Thread.sleep(SLEEPTIME);
                 curX += offsetX;
                 curY += offsetY;
                 board.repaint();
-                Thread.sleep(SLEEPTIME);
-                //wait(); // wait for the animation to be painted
+                
+                wait(); // wait for the animation to be painted
             }
         } catch (InterruptedException ex) {
         } finally {

@@ -142,13 +142,6 @@ public class Game implements Runnable {
     private void chooseBeginner() throws  IOException {
         currentPlayer = player2; // player go first
 
-        // we set the dice
-        // but we show the original result!
-        dice = rollDice(2);
-        currentPlayer.setPossibleHops(dice);
-        snapshot = undoSnapshot = new BoardSnapshot(this);
-        undoPlayer = currentPlayer;
-
     }
 
     private void play() throws Exception {

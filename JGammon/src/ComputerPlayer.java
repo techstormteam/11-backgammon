@@ -25,10 +25,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.ResourceBundle;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  * This subclass of Player is used for player at this local terminal.
@@ -165,11 +161,12 @@ public class ComputerPlayer extends Player {
      * wait for an action!
      *
      * @param rollOnly if this is true, only ROLL is allowed
-     * @return one of ROLL, DOUBLE, GIVE_UP_*
+     * @return one of ROLL, DOUBLE, GIVE_UP_
+     * @throws UndoException *
      * @todo Implement this jgam.Player method
      */
     synchronized public int nextStep(boolean rollOnly) throws
-            InterruptedException {
+            InterruptedException, UndoException {
 
         int ret = -1;
         getGame().getJGam().getFrame().enableButtons();
@@ -179,6 +176,8 @@ public class ComputerPlayer extends Player {
             if (lastMessage.equals("roll")) {
                 ret = ROLL;
                 getGame().getJGam().getFrame().disableUndoButton();
+            } else if (lastMessage.equals("undo")) {
+                throw new UndoException(true);
             }
         }
 
@@ -205,7 +204,15 @@ public class ComputerPlayer extends Player {
 
     public void informRoll() {}
 
-    public void animateMove(Move m) {}
+    /**
+     * show the animation for this move.
+     *
+     * @param m Move to animate
+     */
+    public void animateMove(Move m) {
+        BoardAnimation anim = new BoardAnimation(m.player(), m.from(), m.to());
+        anim.animate(getGame().getBoard());
+    }
 
 
 }
