@@ -16,30 +16,26 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.game.backgammon;
+
 
 /**
- *
- * Used to handle Undo-Requests
- *
- * @author Mattias Ulbrich
- * @version 1.0
+ * An object that has a string representation and belongs to a player
+ * @author Aviv
  */
-public class UndoException extends Exception {
+public interface PlayerOwnedObject {
 
     /**
-     * this is true if a message is to be sent to the opponent (if there is
-     * a connection
-     * this is false if this is the reaction upon such a message and no
-     * new message is to be generated;
+     * get the owner of this object
+     *
+     * @return Player to which this belongs
      */
-    private boolean sendMessage = false;
+    public Player player();
 
-    public UndoException(boolean sendMessage) {
-        this.sendMessage = sendMessage;
-    }
+    /**
+     * set the owner of this.
+     * OPtional operation
+     * @param player the owner to be set
+     */
+    public void setPlayer(Player player);
 
-    public boolean sendMessage() {
-        return sendMessage;
-    }
 }

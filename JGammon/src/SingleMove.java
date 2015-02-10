@@ -16,7 +16,7 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.game.backgammon;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -55,18 +55,6 @@ public class SingleMove implements Move {
 
     public SingleMove(Player player, int from, int to) {
         this(player,from,to,false);
-    }
-
-    public SingleMove(String desc) throws IllegalArgumentException {
-        try {
-            Matcher m = Pattern.compile("([0-9]+)/([0-9]+)\\*?").matcher(desc);
-            m.matches();
-            from = Integer.parseInt(m.group(1));
-            to = Integer.parseInt(m.group(2));
-        } catch (Exception ex) {
-            throw (IllegalArgumentException) (new IllegalArgumentException(desc +
-                    " does not describe a move")).initCause(ex);
-        }
     }
 
     public String toString() {

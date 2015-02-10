@@ -16,14 +16,12 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.game.backgammon;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.game.backgammon.util.IntList;
 
 /**
  * This class captures a player(party) involved in the backgammon game.
@@ -414,15 +412,6 @@ public abstract class Player {
     public int nextStep() throws Exception {
         return nextStep(false);
     }
-
-    /**
-     * the other player offers something. This player may accept or not.
-     * Neither true nor false do imply finishing the game!
-     *
-     * @param offer the offer as index number DOUBLE, GIVE_UP_*
-     * @return true if the offer is accepted.
-     */
-    public abstract boolean acceptsOffer(int offer) throws Exception;
 
     /**
      * is this player a remote player?

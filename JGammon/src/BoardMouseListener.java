@@ -16,7 +16,7 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.game.backgammon;
+
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -349,5 +349,5 @@ public class BoardMouseListener implements MouseListener, MouseMotionListener {
     }
 
     private static ImageIcon greenRing = new ImageIcon(BoardMouseListener.class.
-            getResource("img/greenRing.gif"));
+            getResource("greenRing.gif"));
 }

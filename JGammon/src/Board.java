@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
-package com.game.backgammon;
+
 
 import java.awt.*;
 
@@ -155,35 +155,6 @@ public class Board extends JComponent {
         // animation
         if (boardAnimation != null) {
             boardAnimation.paint(g);
-        }
-    }
-
-    /**
-     * determine the log to the base of 2 of an integer.
-     * The result is the largest integer such that
-     * 2^result <= value
-     * @param value int to determine the log of. must be >= 1
-     * @return the largest int result with 2^result <= value
-     */
-    private static int log2(int value) {
-        if(value <= 0)
-            throw new IllegalArgumentException("log2 argument error: "+value);
-        if(value == 1) return 0;
-        return log2(value >> 1) + 1;
-    }
-
-    /**
-     * paint the final output fields
-     * @param image Image thin chips
-     * @param player Player to draw
-     * @param g Graphics to write to
-     */
-    private void paintOut(ImageIcon image, Player player, Graphics g) {
-
-        Point start = getOutField(player);
-
-        for (int i = 0; i < player.getOff(); i++) {
-            g.drawImage(image.getImage(), start.x, start.y - (i+1) * CHIPTHICKNESS, this);
         }
     }
 
@@ -341,24 +312,22 @@ public class Board extends JComponent {
      * images
      */
     private static ImageIcon background = new ImageIcon(Board.class.getResource(
-            "img/background.png"));
+            "background.png"));
     static ImageIcon whiteChip = new ImageIcon(Board.class.getResource(
-            "img/whiteChip.png"));
+            "whiteChip.png"));
     static ImageIcon blackChip = new ImageIcon(Board.class.getResource(
-            "img/blackChip.png"));
+            "blackChip.png"));
     private static ImageIcon[] blackDice = new ImageIcon[6];
     private static ImageIcon[] whiteDice = new ImageIcon[6];
 
     static {
         for (int i = 1; i <= 6; i++) {
             blackDice[i - 1] = new ImageIcon(Board.class.getResource(
-                    "img/black" + i + ".png"));
+                    "black" + i + ".png"));
             whiteDice[i - 1] = new ImageIcon(Board.class.getResource(
-                    "img/white" + i + ".png"));
+                    "white" + i + ".png"));
         }
     }
-
-    private static Font serifFont = new Font("Serif", Font.BOLD, 52);
 
     /*
      * widths

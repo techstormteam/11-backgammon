@@ -17,7 +17,7 @@
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package com.game.backgammon;
+
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -52,47 +52,6 @@ public class ComputerPlayer extends Player {
 
     public ComputerPlayer(String name) {
         super(name);
-    }
-
-
-    /**
-     * the other player offers something. This player may accept or not.
-     * Neither true nor false do imply finishing the game!
-     *
-     * For the local player the offer is done via a dialog box
-     *
-     * @param offer the offer as index number DOUBLE, GIVE_UP_*
-     * @return true if the offer is accepted.
-     */
-    public boolean acceptsOffer(int offer) {
-
-        JFrame frame = getGame().getJGam().getFrame();
-        if (offer == DOUBLE) {
-            msgFormat.applyPattern("{0} proposes a point doubling. The game will then be worth {1, number} points. Do you accept?");
-            String M = msgFormat.format(new Object[] {
-                                        getOtherPlayer().getName(),
-                                        new Integer(2 *
-                    getGame().getDoubleValue())});
-
-            return JOptionPane.showConfirmDialog(frame, M,
-                                                 "Please confirm",
-                                                 JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.QUESTION_MESSAGE,
-                                                 getChipIcon()) ==
-                    JOptionPane.YES_OPTION;
-        } else {
-            msgFormat.applyPattern("{0} chose to give up. He proposes a {1}. Do you accept?");
-            String M = msgFormat.format(new Object[] {
-                                        getOtherPlayer().getName(),
-                                        getLevelName(offer)});
-
-            return JOptionPane.showConfirmDialog(frame, M,
-                                                 "Please confirm",
-                                                 JOptionPane.YES_NO_OPTION,
-                                                 JOptionPane.QUESTION_MESSAGE,
-                                                 getChipIcon()) ==
-                    JOptionPane.YES_OPTION;
-        }
     }
 
     /**

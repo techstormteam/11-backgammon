@@ -16,21 +16,14 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.game.backgammon;
 
-import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Reader;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.Ostermiller.util.Base64;
-import com.game.backgammon.util.FormatException;
 
 /**
  *
@@ -88,8 +81,6 @@ public class BoardSnapshot {
     private int[] dice;
 
     private List history;
-
-    private BoardSnapshot() {}
 
     /**
      * read a snapshot saved to a file.
@@ -175,95 +166,7 @@ public class BoardSnapshot {
         history = new LinkedList(game.getHistory());
     }
 
-    /**
-     * read a line that is received on the reader.
-     *
-     * it is either NEWGAME --> return null ; no snapshot
-     * or is SETUPBOARD --> set board accordingly
-     * @param r BufferedReader
-     * @return BoardSnapshot
-     * @throws ProtocolException
-     * @throws IOException
-     */
-    public static BoardSnapshot readSnapshotLine(BufferedReader r) throws
-            IOException {
-
-        String line = r.readLine();
-        if (line.equals(NEWGAME)) {
-            return null; // null is for new game here
-        }
-
-        if (!line.startsWith(SETUPBOARD)) {
-            System.out.print(SETUPBOARD + " or " + NEWGAME +
-                                        " expected; got:" + line);
-            return null;
-        }
-
-        byte[] data = Base64.decodeToBytes(line.substring(11));
-        BoardSnapshot ret = new BoardSnapshot();
-
-        // 1. the board
-        int whiteTotal = 0, blueTotal = 0;
-        for (int i = 0; i < 24; i++) {
-            if (data[i] > 0) {
-                ret.whiteBoard[i + 1] = data[i];
-                whiteTotal += data[i];
-            } else {
-                ret.blueBoard[24 - i] = -data[i];
-                blueTotal += -data[i];
-            }
-        }
-
-        // 2. the bars
-        ret.whiteBoard[25] = data[24];
-        whiteTotal += data[24];
-        ret.blueBoard[25] = data[25];
-        blueTotal += data[25];
-
-        // ==> the outs
-        ret.whiteBoard[0] = 15 - whiteTotal;
-        ret.blueBoard[0] = 15 - blueTotal;
-
-        // 3. doubleCube
-        ret.doubleCube = data[26];
-
-        // 4. white's turn
-        ret.whitesTurn = data[27] == 1;
-
-        if (data[28] != -1) {
-            ret.dice = new int[2];
-            ret.dice[0] = (data[28] / 6) + 1;
-            ret.dice[1] = (data[28] % 6) + 1;
-        }
-
-        return ret;
-    }
-
-    public String toSendLine() {
-
-        byte[] data = new byte[29];
-
-        // 1. the board
-        for (int i = 0; i < 24; i++) {
-            data[i] = (byte) (whiteBoard[i + 1] - blueBoard[24 - i]);
-        }
-
-        // 2. the bars
-        data[24] = (byte) whiteBoard[25];
-        data[25] = (byte) blueBoard[25];
-
-        // 3.+4. doubleCube and white's turn
-        data[26] = (byte) doubleCube;
-        data[27] = whitesTurn ? (byte) 1 : (byte) 0;
-
-        if (dice == null) {
-            data[28] = -1;
-        } else {
-            data[28] = (byte) ((dice[0] - 1) * 6 + dice[1] - 1);
-        }
-
-        return SETUPBOARD + " " + Base64.encodeToString(data, false);
-    }
+    
 
     /**
      * ignore comments (#....)
@@ -329,43 +232,7 @@ public class BoardSnapshot {
         return dice;
     }
 
-    public void saveTo(File file) throws IOException {
-        PrintWriter pw = new PrintWriter(new FileWriter(file));
-        pw.println("JGAM");
-        pw.println("# This is a JGam saved backgammon board");
-        pw.println("# Created: " + new Date());
-        pw.println("# Comment: ");
-        pw.println(comment);
-
-        pw.println("\n#white's board:");
-        for (int i = 1; i < 25; i++) {
-            pw.print("" + whiteBoard[i] + ":");
-        }
-        pw.println(whiteBoard[25]);
-
-        pw.println("\n#blue's board:");
-        for (int i = 1; i < 25; i++) {
-            pw.print("" + blueBoard[i] + ":");
-        }
-        pw.println(blueBoard[25]);
-
-        pw.println("\n# Whose turn is it?");
-        pw.println(whitesTurn ? "white" : "blue");
-
-        pw.println("\n# Double cube");
-        pw.println(doubleCube);
-
-        pw.println("\n# the dice (if any)");
-        if (dice == null) {
-            pw.println("nodice");
-        } else {
-            pw.println(dice[0] + " " + dice[1]);
-        }
-
-        pw.flush();
-        pw.close();
-
-    }
+    
 
     public String getComment() {
         return comment;

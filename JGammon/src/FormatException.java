@@ -16,44 +16,28 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.game.backgammon;
 
-import java.io.IOException;
 
 /**
-*
- * Message handled by a ConnectionListener.
- *
- * it has got a type which is either MESSAGE or CLOSED.
- *
- * MESSAGE if a message has arrived
- * CLOSED if the connection has recently been closed.
+ * Wrong file format
  *
  * @author Aviv
+ * @version 1.0
  */
-public class ConnectionMessage {
-
-    public static final int MESSAGE = 0;
-    public static final int CLOSED = 1;
-
-    int type;
-    String message;
-    IOException exception;
-
-    public ConnectionMessage(String string) {
-        message = string;
-        type = MESSAGE;
+public class FormatException extends Exception {
+    public FormatException() {
+        super();
     }
 
-    public ConnectionMessage(int index) {
-        type = index;
+    public FormatException(String message) {
+        super(message);
     }
 
-    public String getMessage() {
-        return message;
+    public FormatException(Throwable cause) {
+        super(cause);
     }
 
-    public int getType() {
-        return type;
+    public FormatException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

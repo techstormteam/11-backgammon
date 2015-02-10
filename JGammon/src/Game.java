@@ -16,7 +16,7 @@
  along with this program; if not, write to the Free Software
  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.game.backgammon;
+
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -219,30 +219,7 @@ public class Game implements Runnable {
         jgam.getFrame().repaint();
         while (step != Player.ROLL) {
             history.add(new HistoryMessage(step, currentPlayer));
-            boolean answer;
-            jgam.getFrame().setLabel(msgFormat.format("Waiting for {0}''s answer",
-                    new Object[] {getOtherPlayer().getName()}));
-            answer = getOtherPlayer().acceptsOffer(step);
             setCurrentPlayerLabel();
-            history.add(new HistoryMessage(answer ? "Accept." :
-                                           "Decline.", getOtherPlayer()));
-            currentPlayer.informAccept(answer);
-            if (step == Player.DOUBLE) {
-                if (answer) {
-                    doubleDice *= 2;
-                    doublePlayer = getOtherPlayer();
-                    jgam.getFrame().repaint();
-		    undoSnapshot = new BoardSnapshot(this);
-		    undoPlayer = currentPlayer;
-                } else {
-                    winner = currentPlayer;
-                    return;
-                }
-            } else if (step != Player.DOUBLE && answer) { // GIVE_UP_*
-                winType = step;    // GIVE_UP_GAMMON ==> GAMMON etc.
-                winner = getOtherPlayer();
-                return;
-            }
             step = currentPlayer.nextStep();
         }
         getOtherPlayer().informRoll();
