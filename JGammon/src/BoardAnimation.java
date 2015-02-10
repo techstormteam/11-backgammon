@@ -1,22 +1,3 @@
-/*
-JGammon: A Backgammon client with nice graphics written in Java
-Copyright (C) 2005 Mattias Ulbrich
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,10 +21,11 @@ public class BoardAnimation extends Thread {
     private double offsetX, offsetY;
 
     public static final int STEPLENGTH = Integer.getInteger(
-            "jgam.animationstep", 100000).intValue();
+            "jgam.animationstep", 1).intValue();
 
+    // Sleep time between moves.
     private static final long SLEEPTIME = Integer.getInteger(
-            "jgam.animationdelay", 100000).intValue();
+            "jgam.animationdelay", 5).intValue();
 
     public BoardAnimation(Player player, int from, int to) {
         this.player = player;
@@ -53,6 +35,8 @@ public class BoardAnimation extends Thread {
         toJag = to;
     }
 
+    
+    // Make animate for Computer, so player can see computer move the tiles
     synchronized public void animate(Board board) {
         try {
             board.setAnimation(this);
@@ -103,6 +87,7 @@ public class BoardAnimation extends Thread {
         }
     }
 
+    // Draw chip icon
     synchronized public void paint(Graphics g) {
         g.drawImage(chip.getImage(), (int) curX, (int) curY, null);
         notify();

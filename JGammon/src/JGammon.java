@@ -1,22 +1,3 @@
-/*
-JGammon: A Backgammon client with nice graphics written in Java
-Copyright (C) 2005 Mattias Ulbrich
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
 
 
 import java.awt.Dimension;
@@ -119,6 +100,7 @@ public class JGammon implements ActionListener {
                 }
             }
 
+            // Init computer and player
             Player player1 = new ComputerPlayer("Computer");
             Player player2 = new LocalPlayer("Player");
             
@@ -133,7 +115,7 @@ public class JGammon implements ActionListener {
             }
             getFrame().repaint();
 
-        } else if (command.equals("close")) {
+        } else if (command.equals("close")) { // execute when close button clicked
             if (game != null) {
                 if(JOptionPane.showConfirmDialog(getFrame(),
                                               "There is a game. Abort it?",
@@ -146,7 +128,7 @@ public class JGammon implements ActionListener {
                 exit(0);
         } else {
             if (game != null) {
-                game.handle(command);
+                game.handle(command); // send event to current player to process
             }
         }
 
@@ -170,6 +152,7 @@ public class JGammon implements ActionListener {
         return jGamFrame;
     }
 
+    // repaint game.
     public void clearGame() {
         if (game != null) {
             game.abort();

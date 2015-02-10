@@ -1,23 +1,3 @@
-/*
-JGammon: A Backgammon client with nice graphics written in Java
-Copyright (C) 2005 Mattias Ulbrich
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-*/
-
-
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -92,30 +72,29 @@ public class JGamFrame extends JFrame {
         contentPane.setLayout(borderLayout1);
         setTitle("Backgammon - " + JGammon.AUTHOR);
         this.addWindowListener(new JGamFrame_this_windowAdapter(this));
+        // Init new button
         buttonNew.setActionCommand("newgame");
         buttonNew.setText("New Game");
+        // Init roll button
         buttonRoll.setActionCommand("roll");
         buttonRoll.setText("Finish");
-        buttonNew.addActionListener(jGam);
-        buttonRoll.addActionListener(jGam);
-        buttonUndo.addActionListener(jGam);
+        // Init undo button
         buttonUndo.setEnabled(true);
         buttonUndo.setActionCommand("undo");
         buttonUndo.setText("Undo");
+        
+        // Add click events
+        buttonNew.addActionListener(jGam);
+        buttonRoll.addActionListener(jGam);
+        buttonUndo.addActionListener(jGam);
+        
+        // Create layout and GUI
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setText("Welcome to" + " Backgammon " + JGammon.VERSION + " - " +  JGammon.AUTHOR);
         jToolBar.setBackground(bgColor);
         jToolBar.setLayout(gridBagLayout1);
         bottomPanel.setLayout(gridBagLayout2);
-//        JPanel panel = new JPanel();
-//        panel.setLayout(null);
-//        panel.add(board);
-//        panel.add(buttonNew);
-//        panel.setBounds(0, 0, 200, 200);
-//        board.setLocation(0, 0);
-//        buttonNew.setLocation(0, 50);
         contentPane.add(board, java.awt.BorderLayout.CENTER);
-//        contentPane.add(buttonNew, java.awt.BorderLayout.CENTER);
         contentPane.add(bottomPanel, java.awt.BorderLayout.SOUTH);
         contentPane.add(jToolBar, java.awt.BorderLayout.NORTH);
         jToolBar.add(component3, new GridBagConstraints(3, 1, 1, 2, 0.0, 0.0
@@ -171,7 +150,7 @@ public class JGamFrame extends JFrame {
 
 }
 
-
+// Catch form close event. 
 class JGamFrame_this_windowAdapter extends WindowAdapter {
     private JGamFrame adaptee;
     JGamFrame_this_windowAdapter(JGamFrame adaptee) {
