@@ -1,12 +1,12 @@
-/com/
 /Board.class
 /BoardAnimation.class
 /BoardMouseListener.class
 /BoardSnapshot.class
 /ComputerPlayer.class
-/ConnectionMessage.class
+/FormatException.class
 /Game.class
 /HistoryMessage.class
+/IntList.class
 /JGamFrame.class
 /JGamFrame_this_windowAdapter.class
 /JGammon.class
@@ -17,8 +17,6 @@
 /PlayerOwnedObject.class
 /SingleMove.class
 /UndoException.class
-/FormatException.class
-/IntList.class
 /background.png
 /black1.png
 /black2.png
