@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
  * This subclass of Player is used for player at this local terminal.
  *
  * It reacts to local UI-input such as moves and button pressing
- * (ROLL; DOUBLE; GIVEUP)
+ * (ROLL)
  *
  * @author Aviv
  */
