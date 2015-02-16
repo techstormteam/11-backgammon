@@ -18,6 +18,27 @@ import javax.swing.JComponent;
 public class GuiOfBoard extends JComponent {
 
 	/*
+     * images
+     */
+    private static ImageIcon bg = new ImageIcon(GuiOfBoard.class.getResource(
+            "background.png"));
+    static ImageIcon whiteIcon = new ImageIcon(GuiOfBoard.class.getResource(
+            "whiteChip.png"));
+    static ImageIcon blackIcon = new ImageIcon(GuiOfBoard.class.getResource(
+            "blackChip.png"));
+    private static ImageIcon[] blackDice = new ImageIcon[6];
+    private static ImageIcon[] whiteDice = new ImageIcon[6];
+
+    static {
+        for (int i = 1; i <= 6; i++) {
+            blackDice[i - 1] = new ImageIcon(GuiOfBoard.class.getResource(
+                    "black" + i + ".png"));
+            whiteDice[i - 1] = new ImageIcon(GuiOfBoard.class.getResource(
+                    "white" + i + ".png"));
+        }
+    }
+	
+	/*
      * widths
      */
     static final int PLATES_WIDTH = 48;
@@ -293,29 +314,6 @@ public class GuiOfBoard extends JComponent {
     public boolean isPlayerOnTop(Player player) {
         return player.isWhite() != isTopBottomFlipped();
     }
-
-    /*
-     * images
-     */
-    private static ImageIcon bg = new ImageIcon(GuiOfBoard.class.getResource(
-            "background.png"));
-    static ImageIcon whiteIcon = new ImageIcon(GuiOfBoard.class.getResource(
-            "whiteChip.png"));
-    static ImageIcon blackIcon = new ImageIcon(GuiOfBoard.class.getResource(
-            "blackChip.png"));
-    private static ImageIcon[] blackDice = new ImageIcon[6];
-    private static ImageIcon[] whiteDice = new ImageIcon[6];
-
-    static {
-        for (int i = 1; i <= 6; i++) {
-            blackDice[i - 1] = new ImageIcon(GuiOfBoard.class.getResource(
-                    "black" + i + ".png"));
-            whiteDice[i - 1] = new ImageIcon(GuiOfBoard.class.getResource(
-                    "white" + i + ".png"));
-        }
-    }
-
-    
 
 
 }
