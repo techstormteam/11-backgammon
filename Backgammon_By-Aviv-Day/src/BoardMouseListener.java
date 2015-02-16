@@ -63,7 +63,7 @@ public class BoardMouseListener implements MouseListener, MouseMotionListener {
      */
     public void mouseClicked(MouseEvent e) {
 
-        System.out.println("klicks " + e.getClickCount() + " button " +
+        System.out.println("clicks " + e.getClickCount() + " button " +
                            e.getButton());
         if (e.getClickCount() != 2) {
             return;
@@ -314,8 +314,6 @@ public class BoardMouseListener implements MouseListener, MouseMotionListener {
 
     }
 
-    private static ImageIcon greenRing = new ImageIcon(BoardMouseListener.class.
-            getResource("greenRing.gif"));
 
     
     

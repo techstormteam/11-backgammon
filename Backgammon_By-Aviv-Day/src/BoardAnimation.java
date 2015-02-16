@@ -21,7 +21,7 @@ public class BoardAnimation extends Thread {
     private double offsetX, offsetY;
 
     public static final int STEPLENGTH = Integer.getInteger(
-            "jgam.animationstep", 1).intValue();
+            "jgam.animationstep", 3).intValue();
 
     // Sleep time between moves.
     private static final long SLEEPTIME = Integer.getInteger(

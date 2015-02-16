@@ -64,18 +64,18 @@ public class ComputerPlayer extends Player {
         return move;
     }
 
-    // Get a random integer.
+    /*Get a random integer.
     private int randomInteger(int aStart, int aEnd, Random aRandom){
         if (aStart > aEnd) {
-          throw new IllegalArgumentException("Start cannot exceed End.");
+         throw new IllegalArgumentException("Start cannot exceed End.");
         }
         //get the range, casting to long to avoid overflow problems
-        long range = (long)aEnd - (long)aStart + 1;
+        long range = (long)aEnd - (long)aStart;
         // compute a fraction of the range, 0 <= frac < range
         long fraction = (long)(range * aRandom.nextDouble());
         int randomNumber =  (int)(fraction + aStart);
         return randomNumber;
-    }
+    }*/
     
     // AI algorithm get best move for computer
     private Move getBestMove() {
@@ -165,9 +165,10 @@ public class ComputerPlayer extends Player {
 		}
     		
     	
-    	Random rand = new Random();
-    	Move randomMove = moves.get(randomInteger(0, moves.size() - 1, rand));
-    	return randomMove;
+    	//Random rand = new Random();
+    	//Move randomMove = moves.get(randomInteger(0, moves.size() - 1, rand));
+    	//return randomMove;
+		return null;
     }
     
     // move to safe place if tile alone
@@ -250,6 +251,7 @@ public class ComputerPlayer extends Player {
         int ret = -1;
         getGame().getJGam().getFrame().enableButtons();
 
+        
         while (ret == -1) {
             wait();
             if (lastMessage.equals("roll")) {

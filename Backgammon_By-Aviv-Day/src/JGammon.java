@@ -36,7 +36,7 @@ public class JGammon implements ActionListener {
     private static JGammon theJGammon;
 
     /**
-     * Construct and show the application.
+     * Game Properties
      */
     private JGammon() {
         jGamFrame = new JGamFrame(this);

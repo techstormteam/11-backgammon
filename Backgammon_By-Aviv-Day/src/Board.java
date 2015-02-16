@@ -51,31 +51,7 @@ public class Board extends JComponent {
     public Dimension getPreferredSize() {
         return size;
     }
-
-    /**
-     * turn the board for 180�
-     */
-    public void toggleTurn() {
-        toggleTopBottom();
-        toggleLeftRight();
-    }
-
-    /**
-     * mirror the board top to bottom
-     */
-    public void toggleTopBottom() {
-        flipTopBottom = !flipTopBottom;
-        repaint();
-    }
-
-    /**
-     * mirror the board left to right
-     */
-    public void toggleLeftRight() {
-        flipLeftRight = !flipLeftRight;
-        repaint();
-    }
-
+    
     /**
      * paint the board.
      * Player 1 white

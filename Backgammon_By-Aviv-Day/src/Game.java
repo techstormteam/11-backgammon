@@ -127,7 +127,7 @@ public class Game implements Runnable {
 
     private void play() throws Exception {
 
-        jgam.getFrame().repaint();
+        jgam.getFrame().repaint(); // after an action(computer move, player move, undo button is clicked,...), game reload
 
         if (dice != null) {
             //
@@ -135,21 +135,24 @@ public class Game implements Runnable {
             //
 
             while (currentPlayer.canMove()) {
-                Move move = currentPlayer.move();
+                Move move = currentPlayer.move(); //current player mean player with his turn now.
+                // when he take action move, game will start his move
                 for (Iterator iter = move.getSingleMoves().iterator();
                                      iter.hasNext(); ) {
                     SingleMove sm = (SingleMove) iter.next();
-                    currentPlayer.performMove(sm);
-                    history.add(sm);
-                    getOtherPlayer().informMove(sm);
+                    currentPlayer.performMove(sm); // this line will change data(number of tiles in plates,reduce step of move...) after moving
+                    history.add(sm); // save history for undo action
+                    getOtherPlayer().informMove(sm); // update data for opponent((number of tiles in plates,reduce step of move...) after moving
+             
                 }
-                jgam.getFrame().repaint();
+                jgam.getFrame().repaint();// afeter move, repaint GUI
             }
-
-            if (currentPlayer.hasWon()) {
-                winner = currentPlayer;
-                if (getOtherPlayer().getOff() == 0) {
-                    if (getOtherPlayer().maxJag() >= 18) {
+            // if we are standing here means current player can't move any more
+            if (currentPlayer.hasWon()) { // check if current player is win
+                winner = currentPlayer; 
+                if (getOtherPlayer().getOff() == 0) { // getOff Means get number of tiles  are eaten
+                	//win mean no tiles are eaten and ... go 
+                    if (getOtherPlayer().maxJag() >= 18) { 
                         winType = 3;
                     } else {
                         winType = 2;
@@ -162,9 +165,9 @@ public class Game implements Runnable {
             // switch players
             //
 
-            switchPlayers();
-            dice = null;
-            snapshot = new BoardSnapshot(this);
+            switchPlayers(); // I think you will understand this
+            dice = null; // let's roll the dice for new turn
+            snapshot = new BoardSnapshot(this); // for undo action
         }
 
         // dice == null now
@@ -172,19 +175,19 @@ public class Game implements Runnable {
         //
         // ROLL
         //
-        int step = currentPlayer.nextStep();
+        int step = currentPlayer.nextStep(); // wait for current click finish button
         getOtherPlayer().setDice(null);
         jgam.getFrame().repaint();
-        while (step != Player.ROLL) {
+        while (step != Player.ROLL) { // user must click finish button to go outside this loop
             history.add(new HistoryMessage(step, currentPlayer));
             setCurrentPlayerLabel();
             step = currentPlayer.nextStep();
         }
         getOtherPlayer().informRoll();
-        dice = rollDice(2);
-        currentPlayer.setDice(dice);
-        undoSnapshot = new BoardSnapshot(this);
-        undoPlayer = currentPlayer;
+        dice = rollDice(2); // roll the dice
+        currentPlayer.setDice(dice); // apply the dice to current player
+        undoSnapshot = new BoardSnapshot(this); // this for undo action
+        undoPlayer = currentPlayer; // this for undo action
 
     }
 
@@ -198,12 +201,12 @@ public class Game implements Runnable {
             }
 
 
-            while (winner == null) {
+            while (winner == null) { // game will continue if no winner has chosen.
                 try {
                     setCurrentPlayerLabel();
-                    play();
+                    play(); // main of game is here
                 } catch (UndoException ex) {
-                    if(!undoSnapshot.equals(new BoardSnapshot(this))) {
+                    if(!undoSnapshot.equals(new BoardSnapshot(this))) { // this block of code for undo action
                         JOptionPane.showMessageDialog(jgam.getFrame(),
                                 "The last moves have been undone");
                         setSnapshot(undoSnapshot);
@@ -229,7 +232,7 @@ public class Game implements Runnable {
                                           JOptionPane.
                                           INFORMATION_MESSAGE,
                                           winner.getChipIcon());
-            jgam.clearGame();
+            jgam.clearGame(); // create new game
 
         } catch (InterruptedIOException ex) {
             // this is ok.
@@ -268,7 +271,7 @@ public class Game implements Runnable {
      * to abort a game the connection must be reset and
      * the running tasked must interrupted (if waiting for input)
      */
-    synchronized public void abort() {
+    synchronized public void abort() { 
         gameThread.interrupt();
         try {
             gameThread.join();
