@@ -2,7 +2,7 @@
  * An object that has a string representation and belongs to a player
  * @author Aviv
  */
-public interface PlayerOwnedObject {
+public interface PlayerObject {
 
     /**
      * get the owner of this object

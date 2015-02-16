@@ -13,12 +13,12 @@ import java.util.*;
  *
  * @author Aviv
  */
-public class MultiMove implements Move {
+public class TwoMoreMove implements Move {
 
     private Move move1, move2;
 
-    public MultiMove(Move m1, Move m2) {
-        if (m1.to() != m2.from()) {
+    public TwoMoreMove(Move m1, Move m2) {
+        if (m1.toPlate() != m2.fromPlate()) {
             throw new IllegalArgumentException("m2 does not continue m2: " + m1 +
                                                " " + m2);
         }
@@ -35,18 +35,18 @@ public class MultiMove implements Move {
     /**
      * get the SingleMoves of which this move is compound
      */
-    public List getSingleMoves() {
-        List ret = new LinkedList(move1.getSingleMoves());
-        ret.addAll(move2.getSingleMoves());
+    public List getOneMoves() {
+        List ret = new LinkedList(move1.getOneMoves());
+        ret.addAll(move2.getOneMoves());
         return ret;
     }
 
-    public int from() {
-        return move1.from();
+    public int fromPlate() {
+        return move1.fromPlate();
     }
 
-    public int to() {
-        return move2.to();
+    public int toPlate() {
+        return move2.toPlate();
     }
 
     public Player player() {
@@ -54,27 +54,27 @@ public class MultiMove implements Move {
     }
 
     public String toString() {
-        String ret = ""+move1.from();
-        SingleMove item = null;
-        for (Iterator iter = getSingleMoves().iterator(); iter.hasNext(); ) {
-            item = (SingleMove) iter.next();
-            ret += "/" + item.to();
+        String ret = ""+move1.fromPlate();
+        OneMove item = null;
+        for (Iterator iter = getOneMoves().iterator(); iter.hasNext(); ) {
+            item = (OneMove) iter.next();
+            ret += "/" + item.toPlate();
         }
         /** @todo append "*" if beat */
         return ret;
     }
 
     public int length() {
-        return from()-to();
+        return fromPlate()-toPlate();
     }
 
-    public int getSingleMovesCount() {
-        return move1.getSingleMovesCount() + move2.getSingleMovesCount();
+    public int getOneMovesCount() {
+        return move1.getOneMovesCount() + move2.getOneMovesCount();
     }
 
     // sorting moves according to the number of hops
     public int compareTo(Object o) {
-        return getSingleMovesCount() - ((Move)o).getSingleMovesCount();
+        return getOneMovesCount() - ((Move)o).getOneMovesCount();
     }
 
 }

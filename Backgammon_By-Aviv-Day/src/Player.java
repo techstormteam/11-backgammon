@@ -17,36 +17,28 @@ import java.util.List;
  */
 public abstract class Player {
 
-    public static final int GAMMON = 2;
-    public static final int BACKGAMMON = 3;
     public static final int ORDINARY = 1;
 
     public static final int ROLL = 0;
-    public static final int DOUBLE = 100;
-
-    public static final int GIVE_UP = ORDINARY;
-    public static final int GIVE_UP_GAMMON = GAMMON;
-    public static final int GIVE_UP_BACKGAMMON = BACKGAMMON;
-
-    private String name;
-    private Game game;
-    private int shownDice[];
+    private String playerName;
+    private GameController gameController;
+    private int displayedDice[];
 
     // 0:off  1:24 board  25:bar
-    private int board[];
+    private int boardGame[];
     // one chip can be dragged arround
     // this is substracted for the the draggingQueries!
     private int draggingAround;
-    private IntList remainingHops;
+    private IntegerList remainingHops;
     // number of chips placed during iniboard
 
     public Player(String name) {
-        this.name = name;
-        initBoard();
+        this.playerName = name;
+        createGame();
     }
 
     public Player() {
-        initBoard();
+        createGame();
     }
 
     /**
@@ -54,12 +46,12 @@ public abstract class Player {
      * @param game Game
      * @throws happens in NetworkPlayer
      */
-    public void setGame(Game game) throws IOException {
-        this.game = game;
+    public void setGameController(GameController game) throws IOException {
+        this.gameController = game;
     }
 
-    public Player getOtherPlayer() {
-        return game.getOtherPlayer(this);
+    public Player getRemainingPlayer() {
+        return gameController.getRemainingPlayer(this);
     }
 
     /**
@@ -67,22 +59,22 @@ public abstract class Player {
      *
      * Can be changed for debug purposes with system property
      */
-    private void initBoard() {
+    private void createGame() {
         String sys = System.getProperty("jgam.initialboard");
-        board = new int[26];
+        boardGame = new int[26];
 
         if (sys == null) {
-            board[24] = 2;
-            board[13] = 5;
-            board[8] = 3;
-            board[6] = 5;
+            boardGame[24] = 2;
+            boardGame[13] = 5;
+            boardGame[8] = 3;
+            boardGame[6] = 5;
         } else {
             int total = 0;
-            for (int i = 1; i < board.length; i++) {
-                board[i] = (int) (sys.charAt(i - 1) - '0');
-                total += board[i];
+            for (int i = 1; i < boardGame.length; i++) {
+                boardGame[i] = (int) (sys.charAt(i - 1) - '0');
+                total += boardGame[i];
             }
-            board[0] = 15 - total;
+            boardGame[0] = 15 - total;
         }
     }
 
@@ -91,48 +83,48 @@ public abstract class Player {
      */
     public void setBoard(int[] newBoard) {
         assert newBoard.length == 26;
-        board = (int[])newBoard.clone();
+        boardGame = (int[])newBoard.clone();
     }
 
-    public int getJag(int pos) {
-        return board[pos];
+    public int getPlate(int pos) {
+        return boardGame[pos];
     }
 
     /**
-     * get the content of a jag.
+     * get the content of a plate.
      * If one of these is currently dragged around (UI)
      * one less is returned
-     * @param pos jag number
-     * @return number of chips on this jag
+     * @param pos plate number
+     * @return number of chips on this plate
      */
-    public int getJagWithDragging(int pos) {
+    public int getPlateWithDragging(int pos) {
         if (pos == draggingAround) {
-            return getJag(pos) - 1;
+            return getPlate(pos) - 1;
         } else {
-            return getJag(pos);
+            return getPlate(pos);
         }
     }
 
     /**
-     * is at this jag a single chip that can be thrown out?
-     * @param i jagindex
+     * is at this plate a single chip that can be thrown out?
+     * @param i plateindex
      * @return true iff there is
      */
     private boolean isPlot(int i) {
-        return getJag(i) == 1;
+        return getPlate(i) == 1;
     }
 
     /**
      * check whether all are at home.
      * I can start playing out by then.
-     * @return true iff there are no chips on jags 7 - 25.
+     * @return true iff there are no chips on plate 7 - 25.
      */
     public boolean areAllAtHome() {
-        return maxJag() <= 6;
+        return maxPlate() <= 6;
     }
 
     public int[] getShownDice() {
-        return shownDice;
+        return displayedDice;
     }
 
 
@@ -140,18 +132,18 @@ public abstract class Player {
      * can i still make a move with the remaining dice-moves.
      *
      * To be able to make a move, it suffices to be able to
-     * move from one jag one length.
+     * move from one plate one length.
      *
      * @return true iff I can still move
      */
     public boolean canMove() {
-        IntList dist = remainingHops.distinctValues();
+        IntegerList dist = remainingHops.distinctValues();
         for (int i = 0; i < dist.length(); i++) {
-            for (int jag = 1; jag <= 25; jag++) {
-                if (isValidMove(jag, dist.at(i))) {
+            for (int plate = 1; plate <= 25; plate++) {
+                if (validMove(plate, dist.at(i))) {
                     return true;
                 }
-                if (isValidMove(jag, jag)) { // play out
+                if (validMove(plate, plate)) { // play out
                     return true;
                 }
             }
@@ -160,56 +152,56 @@ public abstract class Player {
     }
 
     /**
-     * is a move from a jag with a given length possible.
+     * is a move from a plate with a given length possible.
      * The remaininging steps are taken into consideration.
      * If all are at home then steps can be used to play out
-     * @param from jag to start at
+     * @param fromPlate plate to start at
      * @param length length ot the move
      * @return true iff possible
      */
-    public boolean isValidMove(int from, int length) {
-        return canMove(board, from, length, remainingHops);
+    public boolean validMove(int fromPlate, int length) {
+        return isMovable(boardGame, fromPlate, length, remainingHops);
     }
 
 
     /**
-     * get all moves that are possible from a specific startjag on.
+     * get all moves that are possible from a specific startplate on.
      * The remaining steps are taken into consideration. A move may consist
      * of multiple hops.
      *
-     * @param from jag to start at
+     * @param from plate to start at
      * @param List of Move objects
      */
     public List getPossibleMovesFrom(int from) {
-        IntList rem = (IntList) remainingHops.clone();
-        int[] brd = (int[])board.clone();
+        IntegerList rem = (IntegerList) remainingHops.clone();
+        int[] brd = (int[])boardGame.clone();
 
         return getPossibleMovesFrom(from, brd, rem);
     }
 
     private List getPossibleMovesFrom(int from, int[] locBoard,
-                                      IntList locRemaining) {
-        IntList hops = locRemaining.distinctValues();
+                                      IntegerList locRemaining) {
+        IntegerList hops = locRemaining.distinctValues();
         List ret = new ArrayList();
 
         for (int i = 0; i < hops.length(); i++) {
             int length = hops.at(i);
-            if (canMove(locBoard, from, length, locRemaining)) {
+            if (isMovable(locBoard, from, length, locRemaining)) {
                 // change localBoard
                 int to = Math.max(0, from-length);
-                locRemaining.remove(length);
+                locRemaining.removeInteger(length);
                 locBoard[from]--;
                 locBoard[to]++;
-                SingleMove origMove = new SingleMove(this, from, to);
+                OneMove origMove = new OneMove(this, from, to);
                 ret.add(origMove);
                 for (Iterator iter = getPossibleMovesFrom(to,
                         locBoard,
                         locRemaining).iterator(); iter.hasNext(); ) {
                     Move move = (Move) iter.next();
-                    ret.add(new MultiMove(origMove, move));
+                    ret.add(new TwoMoreMove(origMove, move));
                 }
                 // undo changes
-                locRemaining.add(length);
+                locRemaining.addInteger(length);
                 locBoard[to]--;
                 locBoard[from]++;
             }
@@ -225,8 +217,8 @@ public abstract class Player {
      * 1. 1<=from<=25 (not 0!) must have at least one chip of my colour
      * 2. if bar > 0 then from must be 25
      * 3. to(=from-length) may have at most one chip of the opponent.
-     * 4. if to==0 then maxjag must be <= 6
-     * 5. length must be in remainingMoves or maxJag() == from and remainingMoves.max() > from
+     * 4. if to==0 then maxplate must be <= 6
+     * 5. length must be in remainingMoves or maxPlate() == from and remainingMoves.max() > from
      *
      * The parameters got the prefix loc to distinguish them from the gloabal
      * values
@@ -235,16 +227,16 @@ public abstract class Player {
      * @param remainingMoves the remaining moves
      * @return true if a move can be made
      */
-    private boolean canMove(int[] locBoard, int from, int length,
-                            IntList locHops) {
+    private boolean isMovable(int[] locBoard, int from, int length,
+                            IntegerList locHops) {
 
         // correct the length if it left the board!
         length = Math.min(from, length);    // ensures length <= from
         int to = from - length;
-        int maxjag = 0;
+        int maxPlate = 0;
         for (int i = 0; i < locBoard.length; i++) {
             if (locBoard[i] > 0) {
-                maxjag = i;
+                maxPlate = i;
             }
         }
 
@@ -269,12 +261,12 @@ public abstract class Player {
 
         // bugfix => goal == 0 ==> other[25] may be > 1 (0.9.24)
         // 3.
-        if (to != 0 && getOtherPlayer().getJag(25 - to) > 1) {
+        if (to != 0 && getRemainingPlayer().getPlate(25 - to) > 1) {
             return false;
         }
 
         // 4.
-        if (to == 0 && maxjag > 6) {
+        if (to == 0 && maxPlate > 6) {
             return false;
         }
 
@@ -283,7 +275,7 @@ public abstract class Player {
             return true;
         }
 
-        if (from < 6 && maxjag == from && locHops.max() > length) {
+        if (from < 6 && maxPlate == from && locHops.max() > length) {
             return true;
         }
 
@@ -291,11 +283,11 @@ public abstract class Player {
     }
 
     public int getBar() {
-        return board[25];
+        return boardGame[25];
     }
 
     public int getOff() {
-        return board[0];
+        return boardGame[0];
     }
 
 
@@ -304,7 +296,7 @@ public abstract class Player {
      * doublets count 4 times! Store the result in remainingMoves.
      * @return IntList
      */
-    public IntList setPossibleHops(int dice[]) {
+    public IntegerList setPossibleHops(int dice[]) {
 
         if (dice == null || dice.length != 2) {
             return remainingHops = null;
@@ -317,7 +309,7 @@ public abstract class Player {
                     dice[0]};
         }
 
-        remainingHops = new IntList(steps);
+        remainingHops = new IntegerList(steps);
 
         return remainingHops;
 
@@ -330,7 +322,7 @@ public abstract class Player {
      * @param dice int[]
      */
     public void setDice(int[] dice) {
-        setShownDice(dice);
+        setDisplayedDice(dice);
         setPossibleHops(dice);
     }
 
@@ -341,16 +333,16 @@ public abstract class Player {
     /**
      * sets the dice that are shown. The moves that can be made are NOT changed.
      */
-    public void setShownDice(int[] dice) {
-        shownDice = dice;
+    public void setDisplayedDice(int[] dice) {
+        displayedDice = dice;
     }
 
     public String getName() {
-        return name;
+        return playerName;
     }
 
-    public void setName(String n) {
-        name = n;
+    public void setPlayerName(String n) {
+        playerName = n;
     }
 
     public String toString() {
@@ -361,12 +353,12 @@ public abstract class Player {
      * player 1 is white, player 2 is black
      * @return String "black" or "white"
      */
-    public String getColor() {
+    public String getColorName() {
         return isWhite() ? "white" : "black";
     }
 
     public javax.swing.ImageIcon getChipIcon() {
-        return isWhite() ? Board.whiteChip : Board.blackChip;
+        return isWhite() ? GuiOfBoard.whiteIcon : GuiOfBoard.blackIcon;
     }
 
     /**
@@ -385,25 +377,25 @@ public abstract class Player {
 
     /**
      * if this player wants to doube or give up before his/her/move.
-     * @return one of ROLL, DOUBLE, GIVE_UP_*
+     * @return one of ROLL
      * @param rollOnly if true, only ROLL is permitted
      */
-    public abstract int nextStep(boolean rollOnly) throws Exception;
+    public abstract int stepNext(boolean rollOnly) throws Exception;
 
-    public int nextStep() throws Exception {
-        return nextStep(false);
+    public int stepNext() throws Exception {
+        return stepNext(false);
     }
 
     /**
      * tell this player that the opponent wants to throw the dice
      */
-    abstract public void informRoll() throws Exception;
+    abstract public void doRoll() throws Exception;
 
     /**
      * tell this player that the opponent has made a move
      * @param move the move made
      */
-    abstract public void informMove(SingleMove move) throws Exception;
+    abstract public void doMove(OneMove move) throws Exception;
 
     /**
      * free resources such as sockets ...
@@ -414,29 +406,29 @@ public abstract class Player {
      * tell this player whether the opponent accepted an offer or not
      * @param answer the answer to be told.
      */
-    abstract public void informAccept(boolean answer) throws Exception;
+    abstract public void doAccept(boolean answer) throws Exception;
 
     /**
      * are UI-moves to be made right now?
      * @return true if yes
      */
-    abstract public boolean isWaitingForUIMove();
+    abstract public boolean WaitingForUIMove();
 
 
     /**
-     * a player has won when all the chips are in the jag 0
+     * a player has won when all the chips are in the plate 0
      * @return true iff this player has won
      */
-    public boolean hasWon() {
-        return getJag(0) == 15;
+    public boolean hasGameWon() {
+        return getPlate(0) == 15;
     }
 
     /**
      * get the underlying game
      * @return game to which this belongs
      */
-    public Game getGame() {
-        return game;
+    public GameController getGame() {
+        return gameController;
     }
 
 
@@ -445,21 +437,21 @@ public abstract class Player {
      * This move must be a single hop
      * @param m Move to be archived.
      */
-    public void performMove(SingleMove m) {
+    public void performMove(OneMove m) {
 
-        if (!isValidMove(m.from(), m.length())) {
+        if (!validMove(m.fromPlate(), m.length())) {
             throw new IllegalArgumentException("Illegal move " + m);
         }
 
         m.setPlayer(this);
         animateMove(m);
-        if (getOtherPlayer().isPlot(25 - m.to())) {
+        if (getRemainingPlayer().isPlot(25 - m.toPlate())) {
             m.setBeat(true);
-            getOtherPlayer().discardAtJag(25 - m.to());
+            getRemainingPlayer().discardAtPlate(25 - m.toPlate());
         }
-        board[m.from()]--;
-        board[m.to()]++;
-        if (!remainingHops.remove(m.length())) {
+        boardGame[m.fromPlate()]--;
+        boardGame[m.toPlate()]++;
+        if (!remainingHops.removeInteger(m.length())) {
             remainingHops.removeMax();
         }
     }
@@ -472,12 +464,12 @@ public abstract class Player {
 
     /**
      * throw out a chip.
-     * @param i jag to operate on
+     * @param i plate to operate on
      */
-    private void discardAtJag(int i) {
+    private void discardAtPlate(int i) {
         if (isPlot(i)) {
-            board[i]--;
-            board[25]++;
+            boardGame[i]--;
+            boardGame[25]++;
         }
     }
 
@@ -486,25 +478,25 @@ public abstract class Player {
      * @return true iff this is player 1
      */
     public boolean isWhite() {
-        return game.getPlayerWhite() == this;
+        return gameController.getWhite() == this;
     }
 
     /**
-     * set the jag from that is currently one chipped dragged around.
+     * set the plate from that is currently one chipped dragged around.
      * set -1 to clear this.
      *
-     * @param jag jag the chip is from.
+     * @param plate plate the chip is from.
      */
-    public void setDragged(int jag) {
-        draggingAround = jag;
+    public void setDragged(int plate) {
+        draggingAround = plate;
     }
 
     /**
-     *  get the jag with the highest index that contains at least 1 chip
+     *  get the plate with the highest index that contains at least 1 chip
      */
-    public int maxJag() {
+    public int maxPlate() {
         for (int i = 25; i >= 0; i--) {
-            if (getJag(i) > 0) {
+            if (getPlate(i) > 0) {
                 return i;
             }
         }
@@ -513,24 +505,24 @@ public abstract class Player {
     }
 
     /**
-     * adjust local jag number to (glibal) hite jag number.
+     * adjust local plate number to (glibal) hite plate number.
      * this is only done, if 1<=no<=24, not for 0, 25
      * White doesnt need to be adjusted
      */
-    public int adjustJag(int jag) {
-        if (!isWhite() && jag >= 1 && jag <= 24) {
-            return 25 - jag;
+    public int adjustPlate(int plate) {
+        if (!isWhite() && plate >= 1 && plate <= 24) {
+            return 25 - plate;
         } else {
-            return jag;
+            return plate;
         }
     }
 
-    public int[] getBoard() {
-        return (int[])board.clone();
+    public int[] getBoardGame() {
+        return (int[])boardGame.clone();
     }
 
-    public IntList getRemainingHops() {
-        return (IntList)remainingHops.clone();
+    public IntegerList getRemainingHops() {
+        return (IntegerList)remainingHops.clone();
     }
 
 }

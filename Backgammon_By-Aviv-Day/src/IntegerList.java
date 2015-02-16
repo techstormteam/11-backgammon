@@ -4,7 +4,7 @@
  *
  * @author Aviv
  */
-public class IntList {
+public class IntegerList {
 
     // the stored data
     private int array[];
@@ -18,7 +18,7 @@ public class IntList {
      * If this number is reached new space is allocated automatically.
      * @param initsize the number of int-Values to initially provide space for.
      */
-    public IntList(int initsize) {
+    public IntegerList(int initsize) {
         size = 0;
         array = new int[initsize];
     }
@@ -26,7 +26,7 @@ public class IntList {
     /**
      * create a new IntList with an inital space of 10.
      */
-    public IntList() {
+    public IntegerList() {
         this(10);
     }
 
@@ -35,7 +35,7 @@ public class IntList {
      * clone used as underlying data.
      * @param a an int-array which must not be null
      */
-    public IntList(int[] a) {
+    public IntegerList(int[] a) {
         array = (int[])a.clone();
         size = array.length;
     }
@@ -46,7 +46,7 @@ public class IntList {
      * @param start index to start at
      * @param length number of int-values to copy.
      */
-    public IntList(int[] a, int start, int length) {
+    public IntegerList(int[] a, int start, int length) {
         array = new int[length];
         for (int i = 0; i < length; i++) {
             array[i] = a[start+i];
@@ -58,7 +58,7 @@ public class IntList {
      * add an int-value to the end of the list.
      * @param value int value to add
      */
-    public void add(int value) {
+    public void addInteger(int value) {
         if (size == array.length) {
             int[] old = array;
             array = new int[old.length + 10];
@@ -72,7 +72,7 @@ public class IntList {
      * @param pos index to be removed.
      * @throws IndexOutOfBoundsException
      */
-    public void removeIndex(int pos) {
+    public void removeByIndex(int pos) {
         if (pos >= size) {
             throw new IndexOutOfBoundsException("remove: " + pos);
         }
@@ -87,10 +87,10 @@ public class IntList {
      * @param val int-value to be removed
      * @return true iff the value has been found and removed
      */
-    public boolean remove(int val) {
+    public boolean removeInteger(int val) {
         for (int i = 0; i < size; i++) {
             if (array[i] == val) {
-                removeIndex(i);
+                removeByIndex(i);
                 return true;
             }
         }
@@ -127,7 +127,7 @@ public class IntList {
                 maxpos = i;
             }
         }
-        removeIndex(maxpos);
+        removeByIndex(maxpos);
     }
 
     /**
@@ -163,7 +163,7 @@ public class IntList {
      * @return Object
      */
     public Object clone() {
-        return new IntList(array, 0, size);
+        return new IntegerList(array, 0, size);
     }
 
     /**
@@ -171,11 +171,11 @@ public class IntList {
      *
      * @return IntList the unique Sub-IntList
      */
-    public IntList distinctValues() {
-        IntList ret = new IntList();
+    public IntegerList distinctValues() {
+        IntegerList ret = new IntegerList();
         for (int i = 0; i < size; i++) {
             if(!ret.contains(array[i]))
-                ret.add(array[i]);
+                ret.addInteger(array[i]);
         }
         return ret;
     }

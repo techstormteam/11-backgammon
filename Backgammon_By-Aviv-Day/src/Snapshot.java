@@ -11,7 +11,7 @@ import java.util.List;
  * It can be transmitted and received on a single line.
  *
  * transmitted data is:
- *    0-23 jags:  [i] > 0 ==> white[i+1] = [i]
+ *    0-23 plates:  [i] > 0 ==> white[i+1] = [i]
  *                [i] < 0 ==> black[24-i] = [i]
  *    24 : white[25]
  *    25 : black[25]
@@ -40,7 +40,7 @@ import java.util.List;
  * @author Aviv
  * @version 1.0
  */
-public class BoardSnapshot {
+public class Snapshot {
 
     // stores all the data!
     private int[] whiteBoard = new int[26];
@@ -55,10 +55,10 @@ public class BoardSnapshot {
      * take a snapshot from a game
      * @param game Game to snapshoot
      */
-    public BoardSnapshot(Game game) {
-        whiteBoard = game.getPlayerWhite().getBoard();
-        blackBoard = game.getPlayerBlack().getBoard();
-        whitesTurn = (game.getCurrentPlayer() == game.getPlayerWhite());
+    public Snapshot(GameController game) {
+        whiteBoard = game.getWhite().getBoardGame();
+        blackBoard = game.getBlack().getBoardGame();
+        whitesTurn = (game.getCurPlayer() == game.getWhite());
         dice = game.getDice();
         history = new LinkedList(game.getHistory());
     }
@@ -98,7 +98,7 @@ public class BoardSnapshot {
      *   argument; <code>false</code> otherwise.
      */
     public boolean equals(Object obj) {
-        BoardSnapshot other = (BoardSnapshot)obj;
+        Snapshot other = (Snapshot)obj;
         return (intArrayEqual(this.getBlackBoard(), other.getBlackBoard()) &&
                 intArrayEqual(this.getWhiteBoard(), other.getWhiteBoard()) &&
                 this.whitesTurn == other.whitesTurn &&

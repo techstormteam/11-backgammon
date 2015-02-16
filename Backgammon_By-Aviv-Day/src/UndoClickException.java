@@ -3,10 +3,10 @@
  *
  * Used to handle Undo-Requests
  *
- * @author Mattias Ulbrich
+ * @author Aviv
  * @version 1.0
  */
-public class UndoException extends Exception {
+public class UndoClickException extends Exception {
 
     /**
      * this is true if a message is to be sent to the opponent (if there is
@@ -14,13 +14,13 @@ public class UndoException extends Exception {
      * this is false if this is the reaction upon such a message and no
      * new message is to be generated;
      */
-    private boolean sendMessage = false;
+    private boolean message = false;
 
-    public UndoException(boolean sendMessage) {
-        this.sendMessage = sendMessage;
+    public UndoClickException(boolean sendMessage) {
+        this.message = sendMessage;
     }
 
     public boolean sendMessage() {
-        return sendMessage;
+        return message;
     }
 }

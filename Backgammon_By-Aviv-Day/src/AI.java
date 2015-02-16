@@ -16,17 +16,17 @@ import java.util.Random;
  *
  * @author Aviv
  */
-public class ComputerPlayer extends Player {
+public class AI extends Player {
 
     /** used for commication betw. threads */
-    private Object lastMessage;
+    private Object communicationMessa;
 
     /** if this is true
      * moves with the mouse may be done
      */
-    private boolean allowMoves;
+    private boolean allowMoving;
 
-    public ComputerPlayer(String name) {
+    public AI(String name) {
         super(name);
     }
 
@@ -37,13 +37,13 @@ public class ComputerPlayer extends Player {
      * wait till i am waked up and then go for it ...
      *
      * @return Move
-     * @throws UndoException 
+     * @throws UndoClickException 
      * @todo Implement this jgam.Player method
      */
-    synchronized public Move move() throws InterruptedException, UndoException {
+    synchronized public Move move() throws InterruptedException, UndoClickException {
     	
         Move move = getBestMove();
-        getGame().handle(move);
+        getGame().process(move);
         return move;
     }
 
@@ -104,10 +104,10 @@ public class ComputerPlayer extends Player {
     	
     	Map<Integer, Integer> toDuplicate = new HashMap<Integer, Integer>();
     	for (Move move : moves) {
-    		if (!toDuplicate.containsKey(move.to())) {
-    			toDuplicate.put(move.to(), 1);
+    		if (!toDuplicate.containsKey(move.toPlate())) {
+    			toDuplicate.put(move.toPlate(), 1);
     		} else {
-    			toDuplicate.put(move.to(), toDuplicate.get(move.to()) + 1);
+    			toDuplicate.put(move.toPlate(), toDuplicate.get(move.toPlate()) + 1);
     		}
 		}
     	
@@ -115,7 +115,7 @@ public class ComputerPlayer extends Player {
 	    	for (Integer to : toDuplicate.keySet()) {
 				if (toDuplicate.get(to) > 1) {
 					for (Move move : moves) {
-						if (to == move.to()) {
+						if (to == move.toPlate()) {
 							return move;
 						}
 					}
@@ -128,7 +128,7 @@ public class ComputerPlayer extends Player {
 		// (if game can with the roll number can get to the exact place of the alone tile, 
 		// one of them at least). he eats them and the opponent need to go back to the start.
 		for (Move move : moves) {
-			if (getOtherPlayer().getBoard()[25 - move.to()] > 0) {
+			if (getRemainingPlayer().getBoardGame()[25 - move.toPlate()] > 0) {
 				return move;
 			}
 		}
@@ -138,8 +138,8 @@ public class ComputerPlayer extends Player {
 		Move farestTileMove = null;
 		int fromMinJag = Integer.MAX_VALUE;
 		for (Move move : moves) {
-			if (fromMinJag > move.from()) {
-				fromMinJag = move.from();
+			if (fromMinJag > move.fromPlate()) {
+				fromMinJag = move.fromPlate();
 				farestTileMove = move;
 			}
 		}
@@ -157,9 +157,9 @@ public class ComputerPlayer extends Player {
     // move to safe place if tile alone
     private Move moveSafeOfAt(int jag, List<Move> moves) {
     	for (Move move : moves) {
-			if (jag == move.to() && getBoard()[move.from()] != 2) {
+			if (jag == move.toPlate() && getBoardGame()[move.fromPlate()] != 2) {
 				return move;
-			} else if (jag == move.from()) {
+			} else if (jag == move.fromPlate()) {
 				return move;
 			}
 		}
@@ -169,8 +169,8 @@ public class ComputerPlayer extends Player {
     private List<Integer> getJagsAlone() {
     	List<Integer> result = new ArrayList<Integer>();
     	for (int startJag = 0; startJag <= 25; startJag++) {
-    		int jag = adjustJag(startJag);
-    		if (getBoard()[jag] == 1) {
+    		int jag = adjustPlate(startJag);
+    		if (getBoardGame()[jag] == 1) {
     			result.add(jag);
     		}
 		}
@@ -181,7 +181,7 @@ public class ComputerPlayer extends Player {
     private List<Move> getAllMovesInCurrentStep() {
     	List<Move> moves = new ArrayList<Move>();
     	for (int startJag = 0; startJag <= 25; startJag++) {
-    		int jag = adjustJag(startJag);
+    		int jag = adjustPlate(startJag);
 	    	List possibleMoves = getPossibleMovesFrom(jag);
 	        Collections.sort(possibleMoves);
 	        if (possibleMoves != null) {
@@ -203,7 +203,7 @@ public class ComputerPlayer extends Player {
      * @todo Implement this jgam.Player method
      */
     synchronized public void handle(Object msg) {
-        lastMessage = msg;
+        communicationMessa = msg;
         notify();
     }
 
@@ -215,27 +215,27 @@ public class ComputerPlayer extends Player {
      *
      * @param rollOnly if this is true, only ROLL is allowed
      * @return one of ROLL
-     * @throws UndoException *
+     * @throws UndoClickException *
      * @todo Implement this jgam.Player method
      */
-    synchronized public int nextStep(boolean rollOnly) throws
-            InterruptedException, UndoException {
+    synchronized public int stepNext(boolean rollOnly) throws
+            InterruptedException, UndoClickException {
 
         int ret = -1;
-        getGame().getJGam().getFrame().enableButtons();
+        getGame().getApp().getAppFrame().enableButtons();
 
         
         while (ret == -1) {
             wait();
-            if (lastMessage.equals("roll")) {
+            if (communicationMessa.equals("roll")) {
                 ret = ROLL;
-                getGame().getJGam().getFrame().disableUndoButton();
-            } else if (lastMessage.equals("undo")) {
-                throw new UndoException(true);
+                getGame().getApp().getAppFrame().disableUndoButton();
+            } else if (communicationMessa.equals("undo")) {
+                throw new UndoClickException(true);
             }
         }
 
-        getGame().getJGam().getFrame().disableButtons();
+        getGame().getApp().getAppFrame().disableButtons();
         return ret;
 
     }
@@ -245,18 +245,18 @@ public class ComputerPlayer extends Player {
      * are UI-moves to be made right now?
      * @return true if yes
      */
-    synchronized public boolean isWaitingForUIMove() {
-        return allowMoves;
+    synchronized public boolean WaitingForUIMove() {
+        return allowMoving;
     }
 
     /** nothing to be done when aborting */
     public void abort() {}
 
-    public void informAccept(boolean answer) {}
+    public void doAccept(boolean answer) {}
 
-    public void informMove(SingleMove move) {}
+    public void doMove(OneMove move) {}
 
-    public void informRoll() {}
+    public void doRoll() {}
 
     /**
      * show the animation for this move.
@@ -264,8 +264,8 @@ public class ComputerPlayer extends Player {
      * @param m Move to animate
      */
     public void animateMove(Move m) {
-        BoardAnimation anim = new BoardAnimation(m.player(), m.from(), m.to());
-        anim.animate(getGame().getBoard());
+        ComputerAnimation anim = new ComputerAnimation(m.player(), m.fromPlate(), m.toPlate());
+        anim.doComputerAnimation(getGame().getBoardGUI());
     }
 
 

@@ -5,25 +5,25 @@ import java.util.*;
 /**
  * A move of on chip on the board.
  *
- * Each move goes from a jag to a jag.
+ * Each move goes from a plate to a plate.
  * Possible values are 0-25.
  * The length is the difference between from() and to()
  *
  * @author Aviv
  */
-public interface Move extends PlayerOwnedObject, Comparable {
+public interface Move extends PlayerObject, Comparable {
 
     /**
-     * a moves starts at a jag or at the bar
+     * a moves starts at a plate or at the bar
      * @return integer between 1 and 25.
      */
-    public int from();
+    public int fromPlate();
 
     /**
-     * a move ends at a jag or in the off
+     * a move ends at a plate or in the off
      * @return integer between 0 and 24.
      */
-    public int to();
+    public int toPlate();
 
     /**
      * length of this move. The condition length()=from()-to() is always true.
@@ -36,12 +36,12 @@ public interface Move extends PlayerOwnedObject, Comparable {
      * many basic moves are composed
      * @return number of basic moves in this move
      */
-    public int getSingleMovesCount();
+    public int getOneMovesCount();
 
     /**
      * a move may be composed of several basic moves, this methods returns these
      * basic moves
      * @return List of Move-Objets
      */
-    public List getSingleMoves();
+    public List getOneMoves();
 }

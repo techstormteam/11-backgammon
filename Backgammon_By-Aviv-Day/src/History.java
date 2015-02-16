@@ -5,9 +5,9 @@
  * @author not attributable
  * @version 1.0
  */
-public class HistoryMessage implements PlayerOwnedObject {
+public class History implements PlayerObject {
 
-    private String text;
+    private String message;
     private Player player;
 
 
@@ -36,32 +36,15 @@ public class HistoryMessage implements PlayerOwnedObject {
      * @todo Implement this jgam.PlayerOwnedObject method
      */
     public String toString() {
-        return text;
+        return message;
     }
 
     /**
      * create a special Move with a given specialString that is given by
      * an integer which describes an action of a player
-     * @param special DOUBLE or a GIVE_UP_*
      * @param player Player to associate with
      */
-    public HistoryMessage(int special, Player player) {
-        switch (special) {
-        case Player.DOUBLE:
-            this.text = "Propose DOUBLE";
-            break;
-        case Player.GIVE_UP:
-            this.text = "Propose ORDINARY resignation";
-            break;
-        case Player.GIVE_UP_GAMMON:
-            this.text = "Propos GAMMON resignation";
-            break;
-        case Player.GIVE_UP_BACKGAMMON:
-            this.text = "Propose BACKGAMMON resignation";
-            break;
-        default:
-            throw new IllegalArgumentException("" + special + " not allowed");
-        }
+    public History(Player player) {
         this.player = player;
     }
 

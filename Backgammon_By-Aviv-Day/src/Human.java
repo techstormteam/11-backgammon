@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  *
  * @author Aviv
  */
-public class LocalPlayer extends Player {
+public class Human extends Player {
 
     /** used for commication betw. threads */
     private Object lastMessage;
@@ -24,7 +24,7 @@ public class LocalPlayer extends Player {
      */
     private boolean allowMoves;
 
-    public LocalPlayer(String name) {
+    public Human(String name) {
         super(name);
     }
 
@@ -35,10 +35,10 @@ public class LocalPlayer extends Player {
      * wait till i am waked up and then go for it ...
      *
      * @return Move
-     * @throws UndoException 
+     * @throws UndoClickException 
      * @todo Implement this jgam.Player method
      */
-    synchronized public Move move() throws InterruptedException, UndoException {
+    synchronized public Move move() throws InterruptedException, UndoClickException {
         while (true) {
             allowMoves = true;
             wait();
@@ -48,7 +48,7 @@ public class LocalPlayer extends Player {
                 return m;
             }
             if (lastMessage.equals("undo")) {
-                throw new UndoException(true);
+                throw new UndoClickException(true);
             }
         }
     }
@@ -76,10 +76,10 @@ public class LocalPlayer extends Player {
      * @return one of ROLL
      * @todo Implement this jgam.Player method
      */
-    synchronized public int nextStep(boolean rollOnly) throws
+    synchronized public int stepNext(boolean rollOnly) throws
             InterruptedException {
 
-        getGame().getJGam().getFrame().disableButtons();
+        getGame().getApp().getAppFrame().disableButtons();
         return ROLL;
 
     }
@@ -89,18 +89,18 @@ public class LocalPlayer extends Player {
      * are UI-moves to be made right now?
      * @return true if yes
      */
-    synchronized public boolean isWaitingForUIMove() {
+    synchronized public boolean WaitingForUIMove() {
         return allowMoves;
     }
 
     /** nothing to be done when aborting */
     public void abort() {}
 
-    public void informAccept(boolean answer) {}
+    public void doAccept(boolean answer) {}
 
-    public void informMove(SingleMove move) {}
+    public void doMove(OneMove move) {}
 
-    public void informRoll() {}
+    public void doRoll() {}
 
     public void animateMove(Move m) {}
 
