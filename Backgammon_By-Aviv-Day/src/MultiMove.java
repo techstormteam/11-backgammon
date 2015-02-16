@@ -32,14 +32,6 @@ public class MultiMove implements Move {
         move2.setPlayer(player);
     }
 
-    public Move move1() {
-        return move1;
-    }
-
-    public Move move2() {
-        return move2;
-    }
-
     /**
      * get the SingleMoves of which this move is compound
      */

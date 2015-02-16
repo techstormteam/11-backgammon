@@ -41,13 +41,10 @@ public class Game implements Runnable {
 
     // this is the setup to which must be returned to undo
     private BoardSnapshot undoSnapshot;
-    // the player that may undo
-    private Player undoPlayer;
 
     private Player winner = null;
     public static final int SIMPLE_WIN = Player.ORDINARY;
     public static final int GAMMON_WIN = Player.GAMMON;
-    public static final int BACKGAMMON_WIN = Player.BACKGAMMON;
     int winType = SIMPLE_WIN; // 1 simple, 2 gammon, 3 backgammon
 
     private int dice[];
@@ -81,24 +78,8 @@ public class Game implements Runnable {
         return (currentPlayer == player1) ? player2 : player1;
     }
 
-    /**
-     * get a local player that is NOT remote
-     * @return Player that is local
-     */
-    public Player getLocalPlayer() {
-        if (player1.isRemote()) {
-            return player2;
-        } else {
-            return player1;
-        }
-    }
-
     public Player getOtherPlayer(Player p) {
         return p == player1 ? player2 : player1;
-    }
-
-    public Player getUndoPlayer() {
-	return undoPlayer;
     }
 
     /**
@@ -187,7 +168,6 @@ public class Game implements Runnable {
         dice = rollDice(2); // roll the dice
         currentPlayer.setDice(dice); // apply the dice to current player
         undoSnapshot = new BoardSnapshot(this); // this for undo action
-        undoPlayer = currentPlayer; // this for undo action
 
     }
 
@@ -249,7 +229,6 @@ public class Game implements Runnable {
             JOptionPane.showMessageDialog(getJGam().getFrame(), ex.getMessage(),
                                           "Error",
                                           JOptionPane.ERROR_MESSAGE);
-//            jgam.saveBoard();
             jgam.clearGame();
         }
     }
@@ -350,7 +329,7 @@ public class Game implements Runnable {
 
     synchronized public void applySnapshot(BoardSnapshot snapshot) {
         player1.setBoard(snapshot.getWhiteBoard());
-        player2.setBoard(snapshot.getBlueBoard());
+        player2.setBoard(snapshot.getBlackBoard());
         currentPlayer = snapshot.getCurrentPlayer(player1, player2);
         dice = snapshot.getDice();
         currentPlayer.setDice(dice);
@@ -358,10 +337,6 @@ public class Game implements Runnable {
 	if(H != null)
 	    history = H;
 
-    }
-
-    public BoardSnapshot getSnapshot() {
-        return snapshot;
     }
 
 

@@ -119,10 +119,6 @@ public class JGamFrame extends JFrame {
         label.setText(string);
     }
 
-    public void setIcon(ImageIcon icon) {
-        label.setIcon(icon);
-    }
-
     public Board getBoard() {
         return board;
     }

@@ -40,17 +40,6 @@ public class HistoryMessage implements PlayerOwnedObject {
     }
 
     /**
-     * create a message with the given string
-     * @param string given message
-     * @param player Player to associate with
-     */
-    public HistoryMessage(String text, Player player) {
-        this.text = text;
-        this.player = player;
-
-    }
-
-    /**
      * create a special Move with a given specialString that is given by
      * an integer which describes an action of a player
      * @param special DOUBLE or a GIVE_UP_*

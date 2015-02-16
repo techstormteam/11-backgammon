@@ -116,23 +116,6 @@ public class IntList {
     }
 
     /**
-     * @return an array-representation of this IntList.
-     */
-    public int[] toArray() {
-        int[] ret = new int[size];
-        System.arraycopy(array, 0, ret, 0, size);
-        return ret;
-    }
-
-    /**
-     * is this IntList empty?
-     * @return true iff length() == 0
-     */
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    /**
      * remove the maximum from the IntList. remove it only once.
      */
     public void removeMax() {
@@ -169,20 +152,6 @@ public class IntList {
         int m = Integer.MIN_VALUE;
         for (int i = 0; i < size; i++) {
             if (array[i] > m) {
-                m = array[i];
-            }
-        }
-        return m;
-    }
-
-    /**
-     * the minimum in this list.
-     * @return int that is "<=" to all elements in the list
-     */
-    public int min() {
-        int m = Integer.MAX_VALUE;
-        for (int i = 0; i < size; i++) {
-            if (array[i] < m) {
                 m = array[i];
             }
         }

@@ -63,8 +63,6 @@ public class BoardMouseListener implements MouseListener, MouseMotionListener {
      */
     public void mouseClicked(MouseEvent e) {
 
-        System.out.println("clicks " + e.getClickCount() + " button " +
-                           e.getButton());
         if (e.getClickCount() != 2) {
             return;
         }
@@ -152,11 +150,6 @@ public class BoardMouseListener implements MouseListener, MouseMotionListener {
         icon = player.getChipIcon();
 
         possibleMoves = player.getPossibleMovesFrom(startJag);
-        /* debug output
-                 Collections.sort(possibleMoves);
-         for (Iterator iter = possibleMoves.iterator(); iter.hasNext(); ) {
-         System.out.println("Possible move from "+startJag+": "+iter.next());
-                 }*/
 
         board.repaint();
     }
@@ -184,8 +177,8 @@ public class BoardMouseListener implements MouseListener, MouseMotionListener {
                 }
             }
 
-            g.drawImage(icon.getImage(), position.x - board.JAGWIDTH / 2,
-                        position.y - board.JAGWIDTH / 2, null);
+            g.drawImage(icon.getImage(), position.x - Board.JAGWIDTH / 2,
+                        position.y - Board.JAGWIDTH / 2, null);
         }
     }
 
@@ -279,12 +272,12 @@ public class BoardMouseListener implements MouseListener, MouseMotionListener {
     }
 
     private Rectangle getOutField() {
-        Point p = (Point) board.OUT_START.clone();
+        Point p = (Point) Board.OUT_START.clone();
         if (board.isLeftRightFlipped()) {
-            p.x = board.size.width - p.x - board.JAGWIDTH;
+            p.x = Board.size.width - p.x - Board.JAGWIDTH;
         }
         if (!board.isPlayerOnTop(jgam.getGame().getCurrentPlayer())) {
-            p.y = board.size.height - p.y - board.OUTHEIGHT;
+            p.y = Board.size.height - p.y - Board.OUTHEIGHT;
         }
 
         return new Rectangle(p, outwindow);

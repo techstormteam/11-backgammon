@@ -159,7 +159,6 @@ public class JGammon implements ActionListener {
         }
         game = null;
         jGamFrame.setLabel("");
-        jGamFrame.setIcon(null);
         jGamFrame.repaint();
 
     }

@@ -395,12 +395,6 @@ public abstract class Player {
     }
 
     /**
-     * is this player a remote player?
-     * @return true if so
-     */
-    abstract public boolean isRemote();
-
-    /**
      * tell this player that the opponent wants to throw the dice
      */
     abstract public void informRoll() throws Exception;

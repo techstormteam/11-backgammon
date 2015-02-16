@@ -19,8 +19,6 @@ public class LocalPlayer extends Player {
     /** used for commication betw. threads */
     private Object lastMessage;
 
-    private MessageFormat msgFormat = new MessageFormat("");
-
     /** if this is true
      * moves with the mouse may be done
      */
@@ -28,21 +26,6 @@ public class LocalPlayer extends Player {
 
     public LocalPlayer(String name) {
         super(name);
-    }
-
-    /**
-     * given an offer extract the name of it from the constant.
-     * get the localized one!
-     * @param offer int GIVE_UP_*
-     * @return String describing the offer
-     */
-    private String getLevelName(int offer) {
-        switch(offer) {
-        case ORDINARY: return "ORDINARY";
-        case GAMMON: return "GAMMON";
-        case BACKGAMMON: return "BACKGAMMON";
-        }
-        throw new IllegalArgumentException(Integer.toString(offer));
     }
 
     /**
@@ -85,22 +68,12 @@ public class LocalPlayer extends Player {
 
 
     /**
-     *
-     * @return true if so
-     * @todo Implement this jgam.Player method
-     */
-    public boolean isRemote() {
-        return false;
-    }
-
-    private String[] giveups = {getLevelName(ORDINARY), getLevelName(GAMMON), getLevelName(BACKGAMMON)};
-    /**
      * if this player wants to doube or give up before his/her/move.
      *
      * wait for an action!
      *
      * @param rollOnly if this is true, only ROLL is allowed
-     * @return one of ROLL, DOUBLE, GIVE_UP_*
+     * @return one of ROLL
      * @todo Implement this jgam.Player method
      */
     synchronized public int nextStep(boolean rollOnly) throws

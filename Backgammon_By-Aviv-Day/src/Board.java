@@ -298,7 +298,6 @@ public class Board extends JComponent {
     static final int CHIPTHICKNESS = 15;
     static final int BARWIDTH = 97;
     static final int DICE_DIST = 80;
-    static final int DOUBLE_OFFSET = 30;
     static final Dimension size = calcSize();
 
     /**
