@@ -12,11 +12,11 @@ import java.util.List;
  *
  * transmitted data is:
  *    0-23 jags:  [i] > 0 ==> white[i+1] = [i]
- *                [i] < 0 ==> blue[24-i] = [i]
+ *                [i] < 0 ==> black[24-i] = [i]
  *    24 : white[25]
- *    25 : blue[25]
+ *    25 : black[25]
  *    26 : doubleCube   >= 1 white may double
- *                      <= 1 blue may double
+ *                      <= 1 black may double
  *    27 : white's turn?
  *    28 : the dice  (0-35)
  *
@@ -26,7 +26,7 @@ import java.util.List;
  * empty lines are ignored
  *
  * 1. white board
- * 2. blue board
+ * 2. black board
  * 3. whose turn line
  * 4. double cube
  * 5. dice line
