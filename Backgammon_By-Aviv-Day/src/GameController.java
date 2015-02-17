@@ -10,7 +10,7 @@ import java.util.Random;
 
 import javax.swing.JOptionPane;
 
-/**
+/*
  * This is the game itsself - the logic etc.
  * The players are contained in here as well.
  *
@@ -18,9 +18,9 @@ import javax.swing.JOptionPane;
  * It then runs in its own thread.
  *
  * After finding out the beginning party, the players take turns.
- * (method play()).
+ * (method go()).
  *
- * A game can be stopped via the abort-method.
+ * A game can be stopped via the reset-method.
  *
  * @author Aviv
  */
@@ -50,14 +50,14 @@ public class GameController implements Runnable {
 
     private MessageFormat msgFormat = new MessageFormat("");
 
-    public GameController(Player ai, Player player, ApplicationBackgammon jgam) throws
+    public GameController(Player ai, Player player, ApplicationBackgammon backgammonApp) throws
             IOException {
         rand = new Random();
         computerAI = ai;
         human = player;
         computerAI.setGameController(this);
         human.setGameController(this);
-        this.app = jgam;
+        this.app = backgammonApp;
 
     }
 
@@ -81,17 +81,16 @@ public class GameController implements Runnable {
         return p == computerAI ? human : computerAI;
     }
 
-    /**
+    /*
      * announce an action to the game.
      * This called from the awt thread. The message is passed to the
      * current player.
-     * @param msg the object describing the message.
      */
     public void process(Object msg) {
         getCurPlayer().handle(msg);
     }
 
-    /**
+    /*
      * start a thread and save in gameThread.
      */
     public void start() {
@@ -125,7 +124,7 @@ public class GameController implements Runnable {
                     getRemainingPlayer().doMove(sm); // update data for opponent((number of tiles in plates,reduce step of move...) after moving
              
                 }
-                app.getAppFrame().repaint();// afeter move, repaint GUI
+                app.getAppFrame().repaint();// after move, repaint GUI
             }
             // if we are standing here means current player can't move any more
             if (currentPlayer.hasGameWon()) { // check if current player is win
@@ -153,12 +152,12 @@ public class GameController implements Runnable {
         // dice == null now
 
         //
-        // ROLL
+        // FINISH
         //
         int step = currentPlayer.stepNext(); // wait for current click finish button
         getRemainingPlayer().setDice(null);
         app.getAppFrame().repaint();
-        while (step != Player.ROLL) { // user must click finish button to go outside this loop
+        while (step != Player.FINISH) { // user must click finish button to go outside this loop
             historyData.add(new History(currentPlayer));
             setLabelCurrentPlayer();
             step = currentPlayer.stepNext();
@@ -188,7 +187,7 @@ public class GameController implements Runnable {
                     if(!usingSnapshotUndo.equals(new Snapshot(this))) { // this block of code for undo action
                         JOptionPane.showMessageDialog(app.getAppFrame(),
                                 "Undo successfully");
-                        setSnapshot(usingSnapshotUndo);
+                        saveSnapshot(usingSnapshotUndo);
                         useSnap(usingSnapshotUndo);
                         getApp().getAppFrame().disableButtons();
                     }
@@ -215,16 +214,16 @@ public class GameController implements Runnable {
 
         } catch (InterruptedIOException ex) {
             // this is ok.
-            System.err.println(
-                    "Thread has been interrupted to end this thread:");
-            ex.printStackTrace();
+//            System.err.println(
+//                    "Thread has been interrupted to end this thread:");
+//            ex.printStackTrace();
         } catch (InterruptedException ex) {
             // this is ok.
-            System.err.println(
-                    "Thread has been interrupted to end this thread:");
-            ex.printStackTrace();
+//            System.err.println(
+//                    "Thread has been interrupted to end this thread:");
+//            ex.printStackTrace();
         } catch (Exception ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
             JOptionPane.showMessageDialog(getApp().getAppFrame(), ex.getMessage(),
                                           "Error",
                                           JOptionPane.ERROR_MESSAGE);
@@ -245,7 +244,7 @@ public class GameController implements Runnable {
         app.getAppFrame().setLabel(M);
     }
 
-    /**
+    /*
      * to abort a game the connection must be reset and
      * the running tasked must interrupted (if waiting for input)
      */
@@ -276,21 +275,16 @@ public class GameController implements Runnable {
         return app;
     }
 
-    /**
+    /*
      * get the current dice.
-     * @return an array of length 2 or null if there are no dice set at present
      */
     public int[] getDice() {
         return dices;
     }
 
 
-    /**
+    /*
      * roll count dice
-     *
-     * @param count the number of dice to throw
-     * @return int[] must have length of count!!
-     * @todo Implement this jgam.Player method
      */
     private int[] shakeDice(int count) throws IOException {
 
@@ -302,27 +296,18 @@ public class GameController implements Runnable {
     }
 
 
-    /**
+    /*
      * create one dice. If the debug facility "manualdice" is enabled
      * then let the user enter the value, else use random generator;
-     * @return int dice value
      */
     private int getOneDice() {
-        try {
-            if (Boolean.getBoolean("jgam.manualdice")) {
-                return Integer.parseInt(JOptionPane.showInputDialog(app.
-                        getAppFrame(),
-                        "Set dice value:", "3"));
-            }
-        } catch (Exception ex) {}
         return rand.nextInt(6) + 1;
     }
 
-    /**
+    /*
      * save the snapshot to be set when the game begins or restarts.
-     * @param snapshot BoardSnapshot
      */
-    void setSnapshot(Snapshot snapshot) {
+    void saveSnapshot(Snapshot snapshot) {
         this.snapshot = snapshot;
     }
 
@@ -332,9 +317,9 @@ public class GameController implements Runnable {
         currentPlayer = snapshot.getCurrentPlayer(computerAI, human);
         dices = snapshot.getDice();
         currentPlayer.setDice(dices);
-	List H = snapshot.getHistory();
-	if(H != null)
-	    historyData = H;
+		List H = snapshot.getHistory();
+		if(H != null)
+		    historyData = H;
 
     }
 

@@ -1,5 +1,5 @@
 
-/**
+/*
  * A List-Type for the basic type integer.
  *
  * @author Aviv
@@ -11,7 +11,7 @@ public class IntegerList {
     // the size of this list
     private int size;
 
-    /**
+    /*
      * create a new IntList and initially provide space for a given number
      * of int-Values.
      *
@@ -23,14 +23,14 @@ public class IntegerList {
         array = new int[initsize];
     }
 
-    /**
+    /*
      * create a new IntList with an inital space of 10.
      */
     public IntegerList() {
         this(10);
     }
 
-    /**
+    /*
      * create a new IntList from an int-array. This array is cloned and the
      * clone used as underlying data.
      * @param a an int-array which must not be null
@@ -40,7 +40,7 @@ public class IntegerList {
         size = array.length;
     }
 
-    /**
+    /*
      * create a new IntList from a part of an array of int.
      * @param a array to take from
      * @param start index to start at
@@ -54,7 +54,7 @@ public class IntegerList {
         size = length;
     }
 
-    /**
+    /*
      * add an int-value to the end of the list.
      * @param value int value to add
      */
@@ -67,7 +67,7 @@ public class IntegerList {
         array[size++] = value;
     }
 
-    /**
+    /*
      * remove the intvalue at a given index
      * @param pos index to be removed.
      * @throws IndexOutOfBoundsException
@@ -82,7 +82,7 @@ public class IntegerList {
         size--;
     }
 
-    /**
+    /*
      * remove a value from this IntList. Remove it at most once.
      * @param val int-value to be removed
      * @return true iff the value has been found and removed
@@ -97,7 +97,7 @@ public class IntegerList {
         return false;
     }
 
-    /**
+    /*
      * get the value at a certain index.
      * @param index index to get the value of
      * @return int-value at this index
@@ -107,7 +107,7 @@ public class IntegerList {
         return array[index];
     }
 
-    /**
+    /*
      *
      * @return the number of int-values in this IntList
      */
@@ -115,7 +115,7 @@ public class IntegerList {
         return size;
     }
 
-    /**
+    /*
      * remove the maximum from the IntList. remove it only once.
      */
     public void removeMax() {
@@ -130,7 +130,7 @@ public class IntegerList {
         removeByIndex(maxpos);
     }
 
-    /**
+    /*
      * is a certain int-value present in the IntList
      * @param value value to searched
      * @return true iff value is in this IntList.
@@ -144,7 +144,7 @@ public class IntegerList {
         return false;
     }
 
-    /**
+    /*
      * the maximum in this list.
      * @return int that is ">=" to all elements in the list
      */
@@ -158,7 +158,7 @@ public class IntegerList {
         return m;
     }
 
-    /**
+    /*
      * clone this list. The underlying array is deepcopied.
      * @return Object
      */
@@ -166,7 +166,7 @@ public class IntegerList {
         return new IntegerList(array, 0, size);
     }
 
-    /**
+    /*
      * get an IntList that contains every number contained in this but is minimal
      *
      * @return IntList the unique Sub-IntList

@@ -1,9 +1,10 @@
 
 import javax.swing.*;
+
 import java.awt.*;
 
-/**
- * Animation that is shown if the remote player drags a chip.
+/*
+ * Animation that is shown if the Computer AI drags a chip.
  *
  * It is one in a thread of its own.
  *
@@ -80,7 +81,7 @@ public class ComputerAnimation extends Thread {
                 currentY += offsetY;
                 gui.repaint();
                 
-                wait(); // wait for the animation to be painted
+            		wait();// wait for the animation to be painted
             }
         } catch (InterruptedException ex) {
         } finally {

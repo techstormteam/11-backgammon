@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
+/*
  * This class captures a player(party) involved in the backgammon game.
  *
  * Each player knows about its chips in the game.
  * Can thus calculate possible moves and check whether a move is valid or not.
  *
- * Some behaviour is different between remote and local players so this class is
+ * Some behaviour is different between computer AI and human players so this class is
  * abstract.
  *
  * @author Aviv
@@ -19,7 +19,7 @@ public abstract class Player {
 
     public static final int ORDINARY = 1;
 
-    public static final int ROLL = 0;
+    public static final int FINISH = 0;
     private String playerName;
     private GameController gameController;
     private int displayedDice[];
@@ -41,10 +41,8 @@ public abstract class Player {
         createGame();
     }
 
-    /**
-     * sets the Game.
-     * @param game Game
-     * @throws happens in NetworkPlayer
+    /*
+     * sets the GameController.
      */
     public void setGameController(GameController game) throws IOException {
         this.gameController = game;
@@ -54,31 +52,18 @@ public abstract class Player {
         return gameController.getRemainingPlayer(this);
     }
 
-    /**
+    /*
      * initial position of the chips.
-     *
-     * Can be changed for debug purposes with system property
      */
     private void createGame() {
-        String sys = System.getProperty("jgam.initialboard");
         boardGame = new int[26];
-
-        if (sys == null) {
-            boardGame[24] = 2;
-            boardGame[13] = 5;
-            boardGame[8] = 3;
-            boardGame[6] = 5;
-        } else {
-            int total = 0;
-            for (int i = 1; i < boardGame.length; i++) {
-                boardGame[i] = (int) (sys.charAt(i - 1) - '0');
-                total += boardGame[i];
-            }
-            boardGame[0] = 15 - total;
-        }
+        boardGame[24] = 2;
+        boardGame[13] = 5;
+        boardGame[8] = 3;
+        boardGame[6] = 5;
     }
 
-    /**
+    /*
      * call this with care!
      */
     public void setBoard(int[] newBoard) {
@@ -90,7 +75,7 @@ public abstract class Player {
         return boardGame[pos];
     }
 
-    /**
+    /*
      * get the content of a plate.
      * If one of these is currently dragged around (UI)
      * one less is returned
@@ -105,7 +90,7 @@ public abstract class Player {
         }
     }
 
-    /**
+    /*
      * is at this plate a single chip that can be thrown out?
      * @param i plateindex
      * @return true iff there is
@@ -114,7 +99,7 @@ public abstract class Player {
         return getPlate(i) == 1;
     }
 
-    /**
+    /*
      * check whether all are at home.
      * I can start playing out by then.
      * @return true iff there are no chips on plate 7 - 25.
@@ -128,7 +113,7 @@ public abstract class Player {
     }
 
 
-    /**
+    /*
      * can i still make a move with the remaining dice-moves.
      *
      * To be able to make a move, it suffices to be able to
@@ -151,12 +136,12 @@ public abstract class Player {
         return false;
     }
 
-    /**
+    /*
      * is a move from a plate with a given length possible.
-     * The remaininging steps are taken into consideration.
+     * The remaining steps are taken into consideration.
      * If all are at home then steps can be used to play out
      * @param fromPlate plate to start at
-     * @param length length ot the move
+     * @param length length of the move
      * @return true iff possible
      */
     public boolean validMove(int fromPlate, int length) {
@@ -164,7 +149,7 @@ public abstract class Player {
     }
 
 
-    /**
+    /*
      * get all moves that are possible from a specific startplate on.
      * The remaining steps are taken into consideration. A move may consist
      * of multiple hops.
@@ -210,7 +195,7 @@ public abstract class Player {
     }
 
 
-    /**
+    /*
      * checks for a given board whether a certain single hop can be made or not.
      *
      * 0. 1<=length<=6, from >= length
@@ -220,7 +205,7 @@ public abstract class Player {
      * 4. if to==0 then maxplate must be <= 6
      * 5. length must be in remainingMoves or maxPlate() == from and remainingMoves.max() > from
      *
-     * The parameters got the prefix loc to distinguish them from the gloabal
+     * The parameters got the prefix loc to distinguish them from the glogbal
      * values
      *
      * @param board int[] the board to check the move upon
@@ -291,10 +276,9 @@ public abstract class Player {
     }
 
 
-    /**
+    /*
      * from the given dice deduce what move-lengths i could make.
      * doublets count 4 times! Store the result in remainingMoves.
-     * @return IntList
      */
     public IntegerList setPossibleHops(int dice[]) {
 
@@ -316,10 +300,9 @@ public abstract class Player {
     }
 
 
-    /**
+    /*
      * sets the dice that have been thrown and deduce the moves that can be made
      * with these.
-     * @param dice int[]
      */
     public void setDice(int[] dice) {
         setDisplayedDice(dice);
@@ -330,7 +313,7 @@ public abstract class Player {
         setDice(new int[] { a });
     }
 
-    /**
+    /*
      * sets the dice that are shown. The moves that can be made are NOT changed.
      */
     public void setDisplayedDice(int[] dice) {
@@ -349,7 +332,7 @@ public abstract class Player {
         return getName();
     }
 
-    /**
+    /*
      * player 1 is white, player 2 is black
      * @return String "black" or "white"
      */
@@ -361,61 +344,55 @@ public abstract class Player {
         return isWhite() ? GuiOfBoard.whiteIcon : GuiOfBoard.blackIcon;
     }
 
-    /**
+    /*
      * a message is passed from the awtthread. This can be a move or a button
      * push. Only human players pay attention
      *
-     * @param msg Message-Object
      */
     public abstract void handle(Object msg);
 
-    /**
+    /*
      * get the next Move.
      * This either single move, or a multi move
      */
     public abstract Move move() throws Exception;
 
-    /**
-     * if this player wants to doube or give up before his/her/move.
-     * @return one of ROLL
-     * @param rollOnly if true, only ROLL is permitted
-     */
     public abstract int stepNext(boolean rollOnly) throws Exception;
 
     public int stepNext() throws Exception {
         return stepNext(false);
     }
 
-    /**
+    /*
      * tell this player that the opponent wants to throw the dice
      */
     abstract public void doRoll() throws Exception;
 
-    /**
+    /*
      * tell this player that the opponent has made a move
      * @param move the move made
      */
     abstract public void doMove(OneMove move) throws Exception;
 
-    /**
+    /*
      * free resources such as sockets ...
      */
     public void dispose() { }
 
-    /**
+    /*
      * tell this player whether the opponent accepted an offer or not
      * @param answer the answer to be told.
      */
     abstract public void doAccept(boolean answer) throws Exception;
 
-    /**
+    /*
      * are UI-moves to be made right now?
      * @return true if yes
      */
     abstract public boolean WaitingForUIMove();
 
 
-    /**
+    /*
      * a player has won when all the chips are in the plate 0
      * @return true iff this player has won
      */
@@ -423,7 +400,7 @@ public abstract class Player {
         return getPlate(0) == 15;
     }
 
-    /**
+    /*
      * get the underlying game
      * @return game to which this belongs
      */
@@ -432,7 +409,7 @@ public abstract class Player {
     }
 
 
-    /**
+    /*
      * apply a move to the data.
      * This move must be a single hop
      * @param m Move to be archived.
@@ -456,13 +433,12 @@ public abstract class Player {
         }
     }
 
-    /**
-     * show the animation for this move. only remote players do
-     * @param m Move to animate
+    /*
+     * show the animation for this move. only computer AI players do
      */
     abstract public void animateMove(Move m);
 
-    /**
+    /*
      * throw out a chip.
      * @param i plate to operate on
      */
@@ -473,7 +449,7 @@ public abstract class Player {
         }
     }
 
-    /**
+    /*
      * by convention player 1 is white
      * @return true iff this is player 1
      */
@@ -481,7 +457,7 @@ public abstract class Player {
         return gameController.getWhite() == this;
     }
 
-    /**
+    /*
      * set the plate from that is currently one chipped dragged around.
      * set -1 to clear this.
      *
@@ -491,7 +467,7 @@ public abstract class Player {
         draggingAround = plate;
     }
 
-    /**
+    /*
      *  get the plate with the highest index that contains at least 1 chip
      */
     public int maxPlate() {
@@ -504,7 +480,7 @@ public abstract class Player {
         return -1;
     }
 
-    /**
+    /*
      * adjust local plate number to (glibal) hite plate number.
      * this is only done, if 1<=no<=24, not for 0, 25
      * White doesnt need to be adjusted

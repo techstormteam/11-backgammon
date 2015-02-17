@@ -19,14 +19,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-/**
+/*
  * This is the MainWindow-class.
  *
  * On top it has got several Buttons and a message area.
- * In the center lies the board (a JComponent) and in the bottom
- * there is the chat area and the turn and flip buttons.
+ * In the center lies the board (a JComponent).
  *
- * Buttons are partly handled by JGam and partly by this class.
+ * Buttons are partly handled by backgammonApp and partly by this class.
  *
  * @author Aviv
  */
@@ -42,7 +41,7 @@ public class FrameBackgammon extends JFrame {
     private BorderLayout borderLayout1 = new BorderLayout();
     private JPanel jToolBar = new JPanel();
     private JButton btnNew = new JButton();
-    private JButton btnRoll = new JButton();
+    private JButton btnFinish = new JButton();
     private JButton btnUndo = new JButton();
     private JLabel label = new JLabel();
     
@@ -63,22 +62,20 @@ public class FrameBackgammon extends JFrame {
         }
     }
 
-    /**
+    /*
      * Component initialization.
-     *
-     * @throws java.lang.Exception
      */
     private void createBackgammon() throws Exception {
         contentMainPane = (JPanel) getContentPane();
         contentMainPane.setLayout(borderLayout1);
-        setTitle("Backgammon - " + ApplicationBackgammon.AUTHOR);
+        setTitle("Backgammon - by Aviv Day");
         this.addWindowListener(new BackgammonWindowAdapter(this));
         // Init new button
         btnNew.setActionCommand("newgame");
         btnNew.setText("Start A New Game!");
         // Init roll button
-        btnRoll.setActionCommand("roll");
-        btnRoll.setText("Finish Move!");
+        btnFinish.setActionCommand("finish");
+        btnFinish.setText("Finish Move!");
         // Init undo button
         btnUndo.setEnabled(true);
         btnUndo.setActionCommand("undo");
@@ -86,12 +83,12 @@ public class FrameBackgammon extends JFrame {
         
         // Add click events
         btnNew.addActionListener(backgammonApp);
-        btnRoll.addActionListener(backgammonApp);
+        btnFinish.addActionListener(backgammonApp);
         btnUndo.addActionListener(backgammonApp);
         
         // Create layout and GUI
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        label.setText("Welcome to" + " Backgammon " + ApplicationBackgammon.VERSION + " - " +  ApplicationBackgammon.AUTHOR);
+        label.setText("Welcome to" + " Backgammon 1.0.0 - by Aviv Day");
         jToolBar.setBackground(backgColor);
         jToolBar.setLayout(gridBagLayout1);
         bottomPanel.setLayout(gridBagLayout2);
@@ -107,7 +104,7 @@ public class FrameBackgammon extends JFrame {
         jToolBar.add(btnUndo, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
-        jToolBar.add(btnRoll, new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0
+        jToolBar.add(btnFinish, new GridBagConstraints(5, 0, 1, 1, 0.0, 0.0
                 , GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0), 0, 0));
         jToolBar.add(btnNew, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0
@@ -125,7 +122,7 @@ public class FrameBackgammon extends JFrame {
     }
 
     public void enableButtons() {
-    	btnRoll.setEnabled(true);
+    	btnFinish.setEnabled(true);
     }
     
     public void enableUndoButton() {
@@ -137,7 +134,7 @@ public class FrameBackgammon extends JFrame {
     }
 
     public void disableButtons() {
-       btnRoll.setEnabled(false);
+       btnFinish.setEnabled(false);
        btnUndo.setEnabled(false);
     }
 

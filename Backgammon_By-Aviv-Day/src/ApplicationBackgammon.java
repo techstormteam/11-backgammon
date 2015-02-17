@@ -13,29 +13,24 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
-/**
+/*
  * The application Main-class.
  *
  * It is a singleton, only one instance exists and this can be reached from
  * everywhere by
- *    JGammon.jgammon()
- *
- * The main()-method checks for commandline arguments and creates the singleton
- * object.
+ *    ApplicationBackgammon.getApp()
  *
  * @author Aviv
  * @version 1.0
  */
 public class ApplicationBackgammon implements ActionListener {
 
-    public final static String VERSION = "1.0.0";
-    public final static String AUTHOR = "Aviv";
     private FrameBackgammon backgammonFrame;
     private GameController gameController;
 
     private static ApplicationBackgammon backgammonApp;
 
-    /**
+    /*
      * Game Properties
      */
     private ApplicationBackgammon() {
@@ -44,7 +39,7 @@ public class ApplicationBackgammon implements ActionListener {
         backgammonFrame.setVisible(true);
     }
 
-    /**
+    /*
      * Application entry point.
      *
      * @param args String[]
@@ -55,9 +50,8 @@ public class ApplicationBackgammon implements ActionListener {
 
     }
     
-    /**
+    /*
      * center a component on the screen
-     * @param frame component to be centered
      */
     public static void alignFrameCenter(java.awt.Component frame) {
         // Center the window
@@ -74,11 +68,10 @@ public class ApplicationBackgammon implements ActionListener {
 
     }
 
-    /**
+    /*
      * one of the buttons has been pressed.
      * If it is the "New game"-Button handle it here.
      * Else send a message to the game.
-     * @param e ActionEvent telling which button it is
      */
     public void actionPerformed(ActionEvent e) {
         process(e.getActionCommand());
@@ -142,7 +135,7 @@ public class ApplicationBackgammon implements ActionListener {
         return backgammonFrame;
     }
     
-    /** things to be done at the end */
+    /* things to be done at the end */
     private void quit(int i) {
         clearBackgammon();
         System.exit(i);

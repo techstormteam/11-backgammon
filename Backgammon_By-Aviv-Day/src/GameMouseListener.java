@@ -13,7 +13,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-/**
+/*
  * This is used in Board to react to mouse events, such as drag and drop and
  * double click.
  *
@@ -36,7 +36,7 @@ public class GameMouseListener implements MouseListener, MouseMotionListener {
     // where dragging began
     private int startPlate;
 
-    // the position of the jags in the board and their sizes
+    // the position of the plates in the board and their sizes
     static Rectangle[] plates = new Rectangle[25];
     static Dimension outwindow = new Dimension(GuiOfBoard.PLATES_WIDTH, GuiOfBoard.OUTHEIGHT);
     static Dimension platewindow = new Dimension(GuiOfBoard.PLATES_WIDTH, GuiOfBoard.PLATES_HEIGHT);
@@ -57,7 +57,7 @@ public class GameMouseListener implements MouseListener, MouseMotionListener {
     public void mouseMoved(MouseEvent e) {
     }
 
-    /**
+    /*
      * make the move if there is only one possible goal
      * @param e MouseEvent
      */
@@ -117,7 +117,7 @@ public class GameMouseListener implements MouseListener, MouseMotionListener {
     public void mouseExited(MouseEvent e) {
     }
 
-    /**
+    /*
      * dragging begins
      * @param e MouseEvent
      */
@@ -177,7 +177,7 @@ public class GameMouseListener implements MouseListener, MouseMotionListener {
 
    
     
-    /**
+    /*
      * dragging ends
      * @param e MouseEvent
      */
@@ -217,18 +217,13 @@ public class GameMouseListener implements MouseListener, MouseMotionListener {
         guiBoard.repaint();
     }
 
-    /**
-     * draw the the dragged chip and the green possible goals
-     * @param g Graphics to draw to
-     */
 
-
-    /**
-     * calculate the native jag number of a point. Native jags are
+    /*
+     * calculate the native plate number of a point. Native plates are
      * 0 1 2 3 .. 11
      * 12 ... 23
      * @param point Point within the board
-     * @return int 0-23 a native jag number
+     * @return int 0-23 a native plate number
      */
     private int calculatePlate(Point point) {
         for (int i = 0; i < plates.length; i++) {
@@ -239,8 +234,8 @@ public class GameMouseListener implements MouseListener, MouseMotionListener {
         return -1;
     }
 
-    /**
-     * calculate the jag  number of a point. This is the correct number
+    /*
+     * calculate the plate  number of a point. This is the correct number
      * for the white player. the blue is then 25-X.
      * these are
      * 1 2 ... 12
@@ -277,7 +272,7 @@ public class GameMouseListener implements MouseListener, MouseMotionListener {
     }
 
 
-    // calculate the rectangles of the jags.
+    // calculate the rectangles of the plates.
     static {
         int y2 = GuiOfBoard.size.height - GuiOfBoard.BOARD_START.y - platewindow.height;
         // here begin the lower rectangles

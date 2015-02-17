@@ -1,8 +1,8 @@
 
-/**
+/*
  * A Text-Message that will be printed in the history window.
  *
- * @author not attributable
+ * @author Aviv
  * @version 1.0
  */
 public class History implements PlayerObject {
@@ -11,16 +11,15 @@ public class History implements PlayerObject {
     private Player player;
 
 
-    /**
+    /*
      *
      * @return Player to which this belongs
-     * @todo Implement this jgam.PlayerOwnedObject method
      */
     public Player player() {
         return player;
     }
 
-    /**
+    /*
      * set the owner of this.
      *
      * @param player the owner to be set
@@ -29,17 +28,16 @@ public class History implements PlayerObject {
         this.player = player;
     }
 
-    /**
+    /*
      * toString
      *
      * @return String
-     * @todo Implement this jgam.PlayerOwnedObject method
      */
     public String toString() {
         return message;
     }
 
-    /**
+    /*
      * create a special Move with a given specialString that is given by
      * an integer which describes an action of a player
      * @param player Player to associate with

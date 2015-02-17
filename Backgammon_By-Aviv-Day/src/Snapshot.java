@@ -2,9 +2,9 @@
 import java.util.LinkedList;
 import java.util.List;
 
-/**
+/*
  *
- * A BoardSnapshot describes a snapshot of a backgammon board.
+ * A Snapshot describes a snapshot of a backgammon board.
  *
  * Such a snapshot can be saved to disk.
  * It can be also loaded to continue a game.
@@ -15,8 +15,6 @@ import java.util.List;
  *                [i] < 0 ==> black[24-i] = [i]
  *    24 : white[25]
  *    25 : black[25]
- *    26 : doubleCube   >= 1 white may double
- *                      <= 1 black may double
  *    27 : white's turn?
  *    28 : the dice  (0-35)
  *
@@ -28,14 +26,12 @@ import java.util.List;
  * 1. white board
  * 2. black board
  * 3. whose turn line
- * 4. double cube
- * 5. dice line
+ * 4. dice line
  *
  *
  * The following data is stored locally but neither transmitted over the
  * connection nor saved to / read from a file
  *  History
- * @todo transmit history over the connection and save/load in files
  *
  * @author Aviv
  * @version 1.0
@@ -51,9 +47,9 @@ public class Snapshot {
 
     private List history;
 
-    /**
-     * take a snapshot from a game
-     * @param game Game to snapshoot
+    /*
+     * take a snapshot from a gameController
+     * @param game GameController to snapshoot
      */
     public Snapshot(GameController game) {
         whiteBoard = game.getWhite().getBoardGame();
@@ -84,14 +80,13 @@ public class Snapshot {
         return dice;
     }
 
-    /**
+    /*
      * Indicates whether this snapshot is equal to a different one.
      *
      * Snapshots are equal if:
      * - boards are equally setup.
      * - player in turn are equal
      * - dice are equal
-     * - doubleDice are equal
      *
      * @param obj the snapshot object with which to compare.
      * @return <code>true</code> if this object is the same as the obj

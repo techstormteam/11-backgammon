@@ -8,20 +8,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * This subclass of Player is used for player at this local terminal.
- *
- * It reacts to local UI-input such as moves and button pressing
- * (ROLL)
+/*
+ * This subclass of Player is used for computer AI at this local terminal.
  *
  * @author Aviv
  */
 public class AI extends Player {
 
-    /** used for commication betw. threads */
+    /* used for commication between threads */
     private Object communicationMessa;
 
-    /** if this is true
+    /* if this is true
      * moves with the mouse may be done
      */
     private boolean allowMoving;
@@ -30,15 +27,9 @@ public class AI extends Player {
         super(name);
     }
 
-    /**
+    /*
      * get the next Move.
      *
-     * UI waiting
-     * wait till i am waked up and then go for it ...
-     *
-     * @return Move
-     * @throws UndoClickException 
-     * @todo Implement this jgam.Player method
      */
     synchronized public Move move() throws InterruptedException, UndoClickException {
     	
@@ -47,19 +38,6 @@ public class AI extends Player {
         return move;
     }
 
-    /*Get a random integer.
-    private int randomInteger(int aStart, int aEnd, Random aRandom){
-        if (aStart > aEnd) {
-         throw new IllegalArgumentException("Start cannot exceed End.");
-        }
-        //get the range, casting to long to avoid overflow problems
-        long range = (long)aEnd - (long)aStart;
-        // compute a fraction of the range, 0 <= frac < range
-        long fraction = (long)(range * aRandom.nextDouble());
-        int randomNumber =  (int)(fraction + aStart);
-        return randomNumber;
-    }*/
-    
     // AI algorithm get best move for computer
     private Move getBestMove() {
     	List<Move> moves = getAllMovesInCurrentStep();
@@ -148,9 +126,6 @@ public class AI extends Player {
 		}
     		
     	
-    	//Random rand = new Random();
-    	//Move randomMove = moves.get(randomInteger(0, moves.size() - 1, rand));
-    	//return randomMove;
 		return null;
     }
     
@@ -194,13 +169,12 @@ public class AI extends Player {
     	return moves;
     }
     
-    /**
+    /*
      * a message is passed from the awtthread.
      *
      * store it and wake up a possibly waiting thread.
      *
      * @param msg Message-Object
-     * @todo Implement this jgam.Player method
      */
     synchronized public void handle(Object msg) {
         communicationMessa = msg;
@@ -208,16 +182,6 @@ public class AI extends Player {
     }
 
 
-    /**
-     * if this player wants to doube or give up before his/her/move.
-     *
-     * wait for an action!
-     *
-     * @param rollOnly if this is true, only ROLL is allowed
-     * @return one of ROLL
-     * @throws UndoClickException *
-     * @todo Implement this jgam.Player method
-     */
     synchronized public int stepNext(boolean rollOnly) throws
             InterruptedException, UndoClickException {
 
@@ -226,9 +190,9 @@ public class AI extends Player {
 
         
         while (ret == -1) {
-            wait();
-            if (communicationMessa.equals("roll")) {
-                ret = ROLL;
+        		wait();
+            if (communicationMessa.equals("finish")) {
+                ret = FINISH;
                 getGame().getApp().getAppFrame().disableUndoButton();
             } else if (communicationMessa.equals("undo")) {
                 throw new UndoClickException(true);
@@ -241,7 +205,7 @@ public class AI extends Player {
     }
 
 
-    /**
+    /*
      * are UI-moves to be made right now?
      * @return true if yes
      */
@@ -249,7 +213,7 @@ public class AI extends Player {
         return allowMoving;
     }
 
-    /** nothing to be done when aborting */
+    /* nothing to be done when aborting */
     public void abort() {}
 
     public void doAccept(boolean answer) {}
@@ -258,7 +222,7 @@ public class AI extends Player {
 
     public void doRoll() {}
 
-    /**
+    /*
      * show the animation for this move.
      *
      * @param m Move to animate

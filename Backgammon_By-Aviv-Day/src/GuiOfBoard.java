@@ -4,14 +4,14 @@ import java.awt.*;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 
-/**
+/*
  *
  * Component to draw the backgammon board.
  *
- * It fetches the information from a Game-instance.
+ * It fetches the information from a GameController-instance.
  *
- * Additionally it allows drag and drop via a BoardMouseListener.
- * Additionally it allows an Animation to be drawn via BoardAnimation
+ * Additionally it allows drag and drop via a GameMouseListener.
+ * Additionally it allows an Animation to be drawn via ComputerAnimation
  *
  * @author Aviv
  */
@@ -51,7 +51,7 @@ public class GuiOfBoard extends JComponent {
     static final int DICE_DIST = 80;
     static final Dimension size = calculateSize();
 
-    /**
+    /*
      * Points
      */
     // point where the first plate starts (upper left)
@@ -87,7 +87,7 @@ public class GuiOfBoard extends JComponent {
         gameMouseListener = new GameMouseListener(this, gammonApp);
     }
 
-    /**
+    /*
      * calculate the size of this canvas. This is the dimension of the
      * background
      * @return Dimension of this canvas
@@ -101,11 +101,10 @@ public class GuiOfBoard extends JComponent {
         return size;
     }
     
-    /**
+    /*
      * paint the board.
      * Player 1 white
      * Player 2 black
-     * @param g Graphics
      */
     public void paint(Graphics g) {
         g.drawImage(bg.getImage(), 0, 0, null, this);
@@ -165,8 +164,8 @@ public class GuiOfBoard extends JComponent {
         }
     }
 
-    /**
-     * get the lower left corner of the outfield for a player
+    /*
+     * get the lower left corner of the outpoint for a player
      * @param player Player
      * @return Point
      */
@@ -188,7 +187,7 @@ public class GuiOfBoard extends JComponent {
         return new Point(xpos, ypos);
     }
 
-    /**
+    /*
      * transform a logical plate number to one on the screen.
      * this depends also
      * on the color.
@@ -213,7 +212,7 @@ public class GuiOfBoard extends JComponent {
         return number;
     }
 
-    /**
+    /*
      * paint a plate with chips from a certain color.
      * plates are corrected internally!
      *
@@ -234,7 +233,7 @@ public class GuiOfBoard extends JComponent {
 
     }
 
-    /**
+    /*
      * get the point to draw the chip at for a specific position an a plate.
      * plate 1-24 are as seen from white. 0 is lower bar, 25 is upper bar.
      *
@@ -305,7 +304,7 @@ public class GuiOfBoard extends JComponent {
         return topBottomflip;
     }
 
-    /**
+    /*
      * return true if the player has his home in the upper half of the board.
      * this is the case if not vert-flipped and white or flipped and black
      * @param player Player

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
+/*
  * Objects of class Move describe a Move in the Backgammon game.
  *
  * Normally this is the act of moving a chip from one plate to another.
@@ -59,7 +59,7 @@ public class OneMove implements Move {
         beat = b;
     }
 
-    /**
+    /*
      * get the moves of which this move is compound
      */
     public List getOneMoves() {

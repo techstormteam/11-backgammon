@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.*;
 
-/**
+/*
  * A MultiMove is a move that is composed of two Move-Objects m1 and m2.
  *
  * But m1.to = m2.from must always be true!
@@ -32,7 +32,7 @@ public class TwoMoreMove implements Move {
         move2.setPlayer(player);
     }
 
-    /**
+    /*
      * get the SingleMoves of which this move is compound
      */
     public List getOneMoves() {
@@ -60,7 +60,7 @@ public class TwoMoreMove implements Move {
             item = (OneMove) iter.next();
             ret += "/" + item.toPlate();
         }
-        /** @todo append "*" if beat */
+        /* @todo append "*" if beat */
         return ret;
     }
 

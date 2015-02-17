@@ -1,5 +1,5 @@
 
-/**
+/*
  *
  * Used to handle Undo-Requests
  *
@@ -8,7 +8,7 @@
  */
 public class UndoClickException extends Exception {
 
-    /**
+    /*
      * this is true if a message is to be sent to the opponent (if there is
      * a connection
      * this is false if this is the reaction upon such a message and no
